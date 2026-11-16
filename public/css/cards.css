@@ -674,3 +674,17 @@ button.card, a.card { border: 0; padding: 0; background: none; cursor: pointer; 
 
 /* Les cartes non obtenues restent lisibles, sans aucune couleur, même au survol. */
 .card.is-unowned { filter: grayscale(1); }
+
+/* Full Art : l'illustration couvre toute la surface, avec recadrage proportionnel. */
+.card.full .c-art img { object-fit: cover; object-position: 50% 20%; }
+.r-astral .astral-backdrop { inset: 0; z-index: 1; }
+.r-astral .astral-backdrop img {
+  width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%;
+  opacity: 1; filter: none; transform: none; mix-blend-mode: normal;
+  mask-image: none; -webkit-mask-image: none;
+}
+.r-astral .astral-figure { display: none; }
+.r-astral .astral-backdrop::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg,rgba(9,3,26,.68),transparent 35%),linear-gradient(0deg,rgba(9,3,26,.8),transparent 25%);
+}
