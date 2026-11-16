@@ -18,7 +18,7 @@ export async function render(ctx, arg, query) {
     if (!ctx.alive) return;
     owner = { collection: player.collection, fresh: [], stats: player.stats };
   }
-  const ownerStats = () => collStats(owner.collection, owner.stats);
+  const ownerStats = () => { if (!other) owner = S.me; return collStats(owner.collection, owner.stats); };
   if (query.get('serie') && S.serie[query.get('serie')]) {
     F.serie = query.get('serie'); F.show = 'all'; F.page = 1;
   }
