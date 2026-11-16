@@ -24,7 +24,7 @@ function nameClass(name, full) {
  * opts.isNew    : badge NOUVEAU
  * opts.static   : pas de clic / pas d'effet 3D
  * opts.eager    : chargement immédiat de l'image
- * Les cartes cachées (Secrète/Primordiale jamais obtenues) s'affichent en « carte mystère ».
+ * Toutes les raretés utilisent une illustration pleine carte.
  */
 export function cardHTML(id, opts) {
   opts = opts || {};
@@ -203,6 +203,16 @@ export function initTilt() {
   // Image indisponible : on affiche l'initiale du personnage
   document.addEventListener('error', (e) => {
     const t = e.target;
-    if (t && t.tagName === 'IMG') t.style.visibility = 'hidden';
+    if (t && t.tagName === 'IMG') {
+      const card = t.closest('[data-card]');
+      const c = card && S.card[card.dataset.card];
+      // Une illustration locale indisponible revient au portrait du même personnage.
+      if (c?.art && c.img && !t.dataset.fallbackTried && t.getAttribute('src') !== c.img) {
+        t.dataset.fallbackTried = '1';
+        t.src = c.img;
+        return;
+      }
+      t.style.visibility = 'hidden';
+    }
   }, true);
 }

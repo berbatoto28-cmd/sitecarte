@@ -688,3 +688,14 @@ button.card, a.card { border: 0; padding: 0; background: none; cursor: pointer; 
   content: ''; position: absolute; inset: 0; pointer-events: none;
   background: linear-gradient(90deg,rgba(9,3,26,.68),transparent 35%),linear-gradient(0deg,rgba(9,3,26,.8),transparent 25%);
 }
+
+/* Garder le personnage lisible sur toute la carte ; contraste local sous les titres. */
+.card.full .c-shade { background: linear-gradient(180deg,rgba(8,0,22,.24),transparent 22%,transparent 62%,rgba(8,0,22,.25) 76%,rgba(8,0,22,.85) 100%); }
+.card.full .c-plate { left: 6cqw; right: 6cqw; bottom: 5cqw; gap: .7cqw; }
+.card.full .c-plate .c-name { font-size: 7cqw; text-shadow: 0 .4cqw 1cqw #000,0 0 2cqw #000; }
+.card.full .c-plate .c-name.is-long { font-size: 6cqw; }
+.card.full .c-plate .c-name.is-xlong { font-size: 5cqw; }
+.card.full .c-native { font-size: 3.5cqw; }
+.card.full .c-line { font-size: 3.3cqw; }
+.card.r-commune .c-holo,.card.r-commune .c-sparkle { display:none; }
+.card.r-rare .c-sparkle { display:none; }
