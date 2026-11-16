@@ -228,24 +228,9 @@ function grantReward(uid, reward) {
   Object.entries(reward.packs || {}).forEach(([p, n]) => addPacks(uid, p, n));
 }
 
-/* ---------- cartes envoyées au navigateur (masquées si non découvertes) ---------- */
-function discoveredAmong(uid, ids) {
-  const out = new Set();
-  if (!uid) return out;
-  const hidden = ids.filter((id) => G.CARD[id] && G.isHidden(G.CARD[id]));
-  for (let i = 0; i < hidden.length; i += 400) {
-    const chunk = hidden.slice(i, i + 400);
-    const sql = `SELECT card FROM discovered WHERE user_id = ? AND card IN (${chunk.map(() => '?').join(',')})`;
-    for (const r of q(sql).all(uid, ...chunk)) out.add(r.card);
-  }
-  return out;
-}
+/* Toutes les cartes sont publiques, indépendamment des découvertes passées. */
 function cardsFor(uid, ids) {
-  const list = Array.from(new Set(ids)).filter((id) => id && G.CARD[id]);
-  const disc = discoveredAmong(uid, list);
-  const out = {};
-  for (const id of list) out[id] = G.maskCard(G.CARD[id], disc.has(id));
-  return out;
+  return Object.fromEntries([...new Set(ids)].filter(id => G.CARD[id]).map(id => [id, G.CARD[id]]));
 }
 
 /* ---------- statistiques d'une collection ---------- */
@@ -263,6 +248,10 @@ function collStats(rows) {
     if (r.qty > 1) { st.dupes += r.qty - 1; st.dupeValue += (r.qty - 1) * G.RAR[c.rarity].value; }
   }
   for (const [sid, n] of Object.entries(st.bySerie)) if (n >= G.SERIE[sid].count) st.complete++;
+  st.total = G.CARDS.length;
+  st.missing = st.total - st.uniq;
+  st.pct = +(100 * st.uniq / st.total).toFixed(2);
+  st.series = Object.fromEntries(G.SERIES.map(s => [s.id, { owned: st.bySerie[s.id] || 0, total: s.count, missing: s.count - (st.bySerie[s.id] || 0), pct: +(100 * (st.bySerie[s.id] || 0) / s.count).toFixed(2) }]));
   return st;
 }
 function bestOf(rows, n) {
@@ -573,7 +562,6 @@ route('GET', '/api/feed', ({ uid }) => {
 /* --- catalogue paginé (50 000 cartes, pas de rendu massif côté navigateur) --- */
 const catalogNorm = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 const catalogSearch = G.CARDS.map((c) => catalogNorm(`${c.name} ${c.native || ''} ${c.num} ${c.collectionNo} #${String(c.collectionNo).padStart(5, '0')} ${(G.SERIE[c.serie] || {}).name || ''} ${(G.SERIE[c.serie] || {}).title || ''} ${(G.SERIE[c.serie] || {}).code || ''}`));
-const catalogBlindSearch = G.CARDS.map((c) => catalogNorm(`${c.num} ${c.collectionNo} #${String(c.collectionNo).padStart(5, '0')} ${(G.SERIE[c.serie] || {}).name || ''} ${(G.SERIE[c.serie] || {}).title || ''} ${(G.SERIE[c.serie] || {}).code || ''}`));
 const catalogOrder = new Map(G.CARDS.map((c, i) => [c.id, i]));
 /* Vue Classeur : un même manga/anime reste ensemble, y compris les anciennes
    cartes réintroduites en fin de catalogue. Ni l'ID ni le numéro global ne
@@ -592,22 +580,23 @@ route('GET', '/api/catalog', ({ uid, query }) => {
   const sort = String(query.get('sort') || 'num');
   const page = Math.max(1, Math.min(20000, Number.parseInt(query.get('page') || '1', 10) || 1));
   const limit = Math.max(12, Math.min(72, Number.parseInt(query.get('limit') || '48', 10) || 48));
-  // Seulement les petites collections du joueur, jamais les 50k cartes.
-  const owned = new Map(q('SELECT card, qty, is_new FROM collection WHERE user_id = ?').all(uid).map((r) => [r.card, r]));
-  const discovered = qtext ? new Set(q('SELECT card FROM discovered WHERE user_id = ?').all(uid).map((r) => r.card)) : null;
+  const playerName = String(query.get('player') || '').trim();
+  const target = playerName ? q('SELECT id FROM users WHERE name = ?').get(playerName) : { id: uid };
+  if (!target) throw new Oops('Joueur introuvable.', 404);
+  const owned = new Map(q('SELECT card, qty, is_new FROM collection WHERE user_id = ?').all(target.id).map((r) => [r.card, r]));
+
   const filtered = [];
   for (let i = 0; i < G.CARDS.length; i++) {
     const c = G.CARDS[i];
     if (serie && c.serie !== serie) continue;
-    // L'Astral n'existe pas dans le classeur avant d'être réellement découverte.
-    if (c.rarity === 'astral' && !owned.has(c.id)) continue;
+
     if (rarity.size && !rarity.has(c.rarity)) continue;
     const qty = owned.get(c.id)?.qty || 0;
     if (show === 'owned' && !qty) continue;
     if (show === 'missing' && qty) continue;
     if (show === 'dupes' && qty < 2) continue;
     if (show === 'new' && !owned.get(c.id)?.is_new) continue;
-    if (qtext && !(G.isHidden(c) && !discovered.has(c.id) ? catalogBlindSearch[i] : catalogSearch[i]).includes(qtext)) continue;
+    if (qtext && !catalogSearch[i].includes(qtext)) continue;
     filtered.push(c);
   }
   const byNum = (a, b) => catalogOrder.get(a.id) - catalogOrder.get(b.id);
@@ -622,7 +611,7 @@ route('GET', '/api/catalog', ({ uid, query }) => {
   const pages = Math.max(1, Math.ceil(total / limit));
   const actualPage = Math.min(page, pages);
   const ids = filtered.slice((actualPage - 1) * limit, actualPage * limit).map((c) => c.id);
-  return { total, page: actualPage, pages, limit, ids, cards: cardsFor(uid, ids) };
+  return { total, page: actualPage, pages, limit, ids, cards: cardsFor(uid, ids), quantities: Object.fromEntries(ids.map(id => [id, owned.get(id)?.qty || 0])), stats: collStats([...owned.values()]) };
 }, { public: false });
 
 /* --- cartes à la demande --- */
@@ -633,8 +622,7 @@ route('POST', '/api/cards', ({ uid, body }) => {
 route('GET', '/api/series/:id', ({ uid, params }) => {
   const s = G.SERIE[safeDecode(params.id)];
   if (!s) throw new Oops('Série introuvable.', 404);
-  const unlocked = new Set(q('SELECT card FROM discovered WHERE user_id = ?').all(uid).map((r) => r.card));
-  const ids = G.RARITIES.flatMap((r) => G.BY_SERIE[s.id][r.id].filter((c) => c.rarity !== 'astral' || unlocked.has(c.id)).map((c) => c.id));
+  const ids = G.RARITIES.flatMap((r) => G.BY_SERIE[s.id][r.id].map((c) => c.id));
   const cards = cardsFor(uid, ids);
   const order = ids.map((id) => cards[id]).sort((a, b) => a.num.localeCompare(b.num));
   return { serie: s, cards: order };
@@ -970,7 +958,7 @@ route('GET', '/api/players/:name', ({ uid, params }) => {
       name: u.name, avatar: u.avatar || best[0] || null, since: u.created_at, seen: u.last_seen,
       score: st.score, uniq: st.uniq, rank: board ? board.rank : null, bySerie: st.bySerie, best,
       packs: counters.pack_open || 0, trades: counters.trade_done || 0, sold: counters.market_sold || 0,
-      collection,
+      collection, stats: st,
     },
     cards: cardsFor(uid, best.concat(u.avatar ? [u.avatar] : [])),
   };
@@ -1148,7 +1136,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method !== 'GET') { res.writeHead(405); return res.end(); }
     try {
       db.prepare('SELECT 1 AS ready').get();
-      return sendJSON(req, res, 200, { ok: true, app: 'AnimeConnection' });
+      return sendJSON(req, res, 200, { ok: true, app: 'AnimeConnection', version: '20-public-collections' });
     } catch (e) {
       console.error('[health] SQLite indisponible', e);
       return sendJSON(req, res, 503, { ok: false });

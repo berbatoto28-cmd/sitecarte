@@ -1,0 +1,4 @@
+{
+  "_comment": "Ajoutez des vidéos WebM/MP4 et des affiches 4K par identifiant de carte. Exemple dans README_REVEAL_4K.md. À défaut, le reveal utilise l'image du catalogue dans une composition Full HD/4K.",
+  "cards": {}
+}

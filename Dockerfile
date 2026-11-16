@@ -18,5 +18,8 @@ RUN cat /tmp/v20-parts/part-*.bin > /tmp/animeconnection-v20.zip \
     && test -f /app/data/cards.json \
     && test -f /app/public/index.html \
     && test -f /app/public/art/summer/SUM-043.webp
+COPY server.js package.json /app/
+COPY lib/ /app/lib/
+COPY public/ /app/public/
 EXPOSE 3000
 CMD ["node", "--disable-warning=ExperimentalWarning", "server.js"]

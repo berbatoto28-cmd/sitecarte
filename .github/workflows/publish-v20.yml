@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - 'Dockerfile'
+      - 'server.js'
+      - 'lib/**'
+      - 'public/**'
       - '.v20-parts/**'
       - '.github/workflows/publish-v20.yml'
   workflow_dispatch:
