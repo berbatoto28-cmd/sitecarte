@@ -1,0 +1,11 @@
+# Le build final ne contient que le jeu public, le catalogue et le serveur.
+.git
+node_modules
+*.zip
+*.rar
+*.db
+*.db-*
+tools
+**/.cache
+*.log
+.DS_Store

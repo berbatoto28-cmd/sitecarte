@@ -1,0 +1,15 @@
+AnimeConnection V20 - mise a jour du site Railway existant
+
+CARTES AJOUTEES : SUM-038 a SUM-043, toutes LEGENDAIRES.
+Yoruichi SUM-037 conserve sa rarete MYTHIQUE de la V19.
+Total : 58 949 cartes, 43 Summer Waifus.
+
+DANS LE DOSSIER : double-clique sur METTRE_A_JOUR_RAILWAY.bat
+Choisis le projet existing pleasant-magic, environnement production,
+service daring-determination. NE CREE PAS DE NOUVEAU PROJET.
+
+Le stockage de comptes est conserve dans le volume existant /data.
+Il n'y a aucune base de donnees animeconnection.db dans cette archive.
+Le site ne sera mis a jour qu'apres un deploy SUCCESS.
+
+URL du site : https://daring-determination-production.up.railway.app
