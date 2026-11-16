@@ -33,7 +33,7 @@ export function cardHTML(id, opts) {
   if (c.rarity === 'astral') return astralHTML(c, opts);
   const r = S.rar[c.rarity];
   const s = S.serie[c.serie] || { name: '', color: '#8b5cf6' };
-  const full = r.fullArt;
+  const full = true;
   const cls = ['card', `r-${c.rarity}`];
   if (opts.missing) cls.push('is-unowned');
   if (full) cls.push('full');
