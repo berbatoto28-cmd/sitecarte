@@ -1,0 +1,36 @@
+name: Construire AnimeConnection V20
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Dockerfile'
+      - '.v20-parts/**'
+      - '.github/workflows/publish-v20.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recuperer les fichiers
+        uses: actions/checkout@v4
+      - name: Connexion GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Construire et publier la V20
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/berbatoto28-cmd/sitecarte:v20
+          labels: |
+            org.opencontainers.image.source=https://github.com/berbatoto28-cmd/sitecarte
+            org.opencontainers.image.description=AnimeConnection V20
