@@ -671,3 +671,6 @@ button.card, a.card { border: 0; padding: 0; background: none; cursor: pointer; 
 .c-unowned{background:#2b174c;color:#fff;font-size:clamp(10px,3.5cqw,15px)}
 .card .c-art img{object-fit:contain}
 .r-astral .astral-figure img{transform:none;mask-image:none;-webkit-mask-image:none}
+
+/* Les cartes non obtenues restent lisibles, sans aucune couleur, même au survol. */
+.card.is-unowned { filter: grayscale(1); }

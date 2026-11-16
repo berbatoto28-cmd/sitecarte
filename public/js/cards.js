@@ -19,7 +19,7 @@ function nameClass(name, full) {
 
 /**
  * Carte complète.
- * opts.missing  : carte non possédée (silhouette)
+ * opts.missing  : carte non possédée (niveaux de gris)
  * opts.qty      : badge ×N si > 1
  * opts.isNew    : badge NOUVEAU
  * opts.static   : pas de clic / pas d'effet 3D
@@ -35,6 +35,7 @@ export function cardHTML(id, opts) {
   const s = S.serie[c.serie] || { name: '', color: '#8b5cf6' };
   const full = r.fullArt;
   const cls = ['card', `r-${c.rarity}`];
+  if (opts.missing) cls.push('is-unowned');
   if (full) cls.push('full');
   if (c.theme) cls.push(`t-${c.theme}`);
 
@@ -80,6 +81,7 @@ export function cardHTML(id, opts) {
 function astralHTML(c, opts = {}) {
   const serie = S.serie[c.serie] || {name:'Univers',color:'#b7a0ff'};
   const classes = ['card','r-astral','t-astral','full'];
+  if (opts.missing) classes.push('is-unowned');
 
   if (!opts.static) classes.push('is-click');
   if (opts.cls) classes.push(opts.cls);
