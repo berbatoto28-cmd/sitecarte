@@ -1,0 +1,9 @@
+AnimeConnection V20 • Railway
+================================
+Cette version inclut 58 949 cartes, dont 43 Summer Waifus.
+
+Les dossiers data/, public/ et lib/ sont contenus dans l'archive ZIP
+decoupee en morceaux binaires sous .v20-parts/.
+Le Dockerfile reconstruit et extrait automatiquement l'archive durant le build.
+
+Ne pas supprimer le volume Railway /data : c'est la base SQLite des joueurs.
