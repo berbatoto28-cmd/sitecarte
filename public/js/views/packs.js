@@ -55,11 +55,12 @@ export function render(ctx) {
   </section>
 
   <section class="section">
-    <h2 class="section-title">${icon('sun')} Éditions spéciales en vedette <small>Accès direct aux sets collector, dont Summer Waifu</small></h2>
+    <h2 class="section-title">${icon('sun')} Éditions spéciales en vedette <small>League of Legends à la une · Même prix que Summer Waifus</small></h2>
     <div class="special-editions">
       ${S.series.filter((s) => s.special).map((s) => {
         const b = st.byS[s.id];
-        return `<div class="panel pack-tile pack-tile-special t-${esc(s.theme || 'legends')}" style="--sc:${esc(s.color)}">
+        return `<div class="panel pack-tile pack-tile-special t-${esc(s.theme || 'legends')}" style="--sc:${esc(s.color)};${s.id==='lol-runeterra'?'border:2px solid #ddbaff;box-shadow:0 0 35px #995af966;background:linear-gradient(150deg,#29154a,#120c21);':''}">
+          ${s.id==='lol-runeterra'?'<div style="padding:7px 11px;margin:0 auto 12px;width:max-content;border-radius:99px;background:linear-gradient(95deg,#f1cf85,#a875ef);color:#170a29;font-weight:900;letter-spacing:.13em;font-size:11px">✦ NOUVEAUTÉ · EN VEDETTE ✦</div>':''}
           ${packHTML('special', { serie: s.id })}
           <h3>${esc(s.name)}</h3>
           <p>${esc(s.desc || 'Édition collector à drop rare.')}</p>
