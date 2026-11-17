@@ -5,44 +5,44 @@
 
 /* SECRÈTE : contrastes cyan/fuchsia, sceau géométrique, trame cryptée.
    Différent de la relique Primordiale et de l'espace Astral. */
-.r-secrete {
+.r-secrete:not(.is-special-edition) {
   --frame: radial-gradient(circle at 70% 24%, #132e43, #080a1b 57%, #12071f);
   --ring: linear-gradient(145deg, #0b192b, #67e8f9, #0b192b, #f0abfc, #0b192b);
 }
-.r-secrete .c-art img {
+.r-secrete:not(.is-special-edition) .c-art img {
   object-position: 50% 23%;
   filter: saturate(1.2) contrast(1.13) brightness(.93);
 }
-.r-secrete .c-shade {
+.r-secrete:not(.is-special-edition) .c-shade {
   background: linear-gradient(180deg, rgba(3,13,29,.46), transparent 25%, transparent 43%, rgba(6,15,35,.76) 76%, #040b19 100%);
 }
-.r-secrete .c-inner {
+.r-secrete:not(.is-special-edition) .c-inner {
   inset: 3.1cqw 3.1cqw 3.1cqw;
   border-radius: 1.5cqw;
   box-shadow: inset 0 0 0 .35cqw rgba(103,232,249,.7), inset 0 0 0 1.5cqw rgba(5,19,36,.5);
   clip-path: polygon(0 6%, 6% 0, 94% 0, 100% 6%, 100% 94%, 94% 100%, 6% 100%, 0 94%);
 }
-.r-secrete .c-emblem {
+.r-secrete:not(.is-special-edition) .c-emblem {
   top: 5.8cqw; left: auto; right: 5.6cqw; border-radius: .7cqw;
   color: #d9fdff; letter-spacing: .24em;
   background: linear-gradient(125deg, rgba(2,22,38,.94), rgba(53,16,69,.8));
   box-shadow: inset 0 0 0 .34cqw #6ff7ff, 0 0 5cqw rgba(65,217,255,.4);
 }
-.r-secrete .c-plate {
+.r-secrete:not(.is-special-edition) .c-plate {
   left: 8cqw; right: 8cqw; bottom: 7cqw;
   padding: 3cqw 3cqw 2cqw;
   background: linear-gradient(90deg, rgba(2,15,34,.82), rgba(2,15,34,.24));
   border-left: .8cqw solid #6ff7ff;
   box-shadow: -2cqw 0 5cqw -3cqw rgba(0,245,255,.6);
 }
-.r-secrete .c-plate .c-name {
+.r-secrete:not(.is-special-edition) .c-plate .c-name {
   color: #e7fdff;
   background: none; -webkit-text-fill-color: currentColor;
   text-shadow: 0 0 3cqw rgba(111,247,255,.7), 0 .5cqw 2cqw #020b19;
 }
-.r-secrete .c-ring { animation: none; padding: 1.4cqw; background: linear-gradient(145deg, #5eead4, #60a5fa 25%, #d946ef 52%, #67e8f9 85%); }
-.r-secrete .c-holo { opacity: .22; }
-.r-secrete .c-sparkle { opacity: .24; }
+.r-secrete:not(.is-special-edition) .c-ring { animation: none; padding: 1.4cqw; background: linear-gradient(145deg, #5eead4, #60a5fa 25%, #d946ef 52%, #67e8f9 85%); }
+.r-secrete:not(.is-special-edition) .c-holo { opacity: .22; }
+.r-secrete:not(.is-special-edition) .c-sparkle { opacity: .24; }
 .elite-secret-cipher, .elite-secret-sigil { position:absolute; pointer-events:none; }
 .elite-secret-cipher {
   inset: 0; z-index: 2; opacity: .42;
@@ -64,43 +64,43 @@
 .elite-secret-sigil::after { inset: 14cqw; border-color: rgba(103,232,249,.85); }
 
 /* PRIMORDIALE : cadrage d'artefact ancien, dorures et halo solaire sacré. */
-.r-primordiale {
+.r-primordiale:not(.is-special-edition) {
   --frame: radial-gradient(circle at 50% 33%, #6e4920, #25151b 62%, #100c14);
   --ring: linear-gradient(145deg, #fff5c4, #a76d26, #ffdf80, #8a4f23, #fff5c4);
 }
-.r-primordiale .c-art img {
+.r-primordiale:not(.is-special-edition) .c-art img {
   object-position: 50% 13%;
   filter: saturate(.85) contrast(1.11) sepia(.08);
 }
-.r-primordiale .c-shade {
+.r-primordiale:not(.is-special-edition) .c-shade {
   background: linear-gradient(180deg, rgba(50,27,9,.43), transparent 27%, transparent 52%, rgba(29,18,6,.64) 76%, #150b08 100%);
 }
-.r-primordiale .c-inner {
+.r-primordiale:not(.is-special-edition) .c-inner {
   inset: 3cqw; border-radius: 7cqw 7cqw 3cqw 3cqw;
   box-shadow: inset 0 0 0 .75cqw #e7ba65, inset 0 0 0 2.1cqw rgba(36,20,7,.5), inset 0 0 0 2.6cqw rgba(255,234,175,.6);
   mix-blend-mode: normal;
 }
-.r-primordiale .c-emblem {
+.r-primordiale:not(.is-special-edition) .c-emblem {
   left: 50%; right: auto; top: 5.5cqw; transform: translateX(-50%);
   border-radius: 0 0 5cqw 5cqw; white-space: nowrap;
   background: linear-gradient(180deg, #704013, #321c0b);
   color: #fff3c1; letter-spacing: .14em;
   box-shadow: inset 0 0 0 .42cqw #f8d47c, 0 .5cqw 5cqw rgba(255,213,99,.4);
 }
-.r-primordiale .c-plate {
+.r-primordiale:not(.is-special-edition) .c-plate {
   left: 6cqw; right: 6cqw; bottom: 6.4cqw; text-align: center;
   padding: 6cqw 3cqw 1.6cqw;
   border-top: .5cqw solid rgba(255,222,137,.82);
   background: linear-gradient(180deg, rgba(37,17,4,.1), rgba(37,17,4,.82));
 }
-.r-primordiale .c-plate .c-name {
+.r-primordiale:not(.is-special-edition) .c-plate .c-name {
   font-family: Georgia, 'Times New Roman', serif;
   letter-spacing: .01em; font-weight: 700; line-height: 1.05;
 }
-.r-primordiale .c-line { border-top-color: rgba(255,215,117,.45); }
-.r-primordiale .c-ring { padding: 2.3cqw; background: conic-gradient(from var(--ang), #ffeec1, #ad721b, #fff3c8, #885019, #ffeec1); }
-.r-primordiale .c-holo { opacity: .12; }
-.r-primordiale .c-sparkle { opacity: .45; }
+.r-primordiale:not(.is-special-edition) .c-line { border-top-color: rgba(255,215,117,.45); }
+.r-primordiale:not(.is-special-edition) .c-ring { padding: 2.3cqw; background: conic-gradient(from var(--ang), #ffeec1, #ad721b, #fff3c8, #885019, #ffeec1); }
+.r-primordiale:not(.is-special-edition) .c-holo { opacity: .12; }
+.r-primordiale:not(.is-special-edition) .c-sparkle { opacity: .45; }
 .elite-primordial-sun, .elite-primordial-runes { position:absolute; pointer-events:none; }
 .elite-primordial-sun {
   z-index: 2; top: 7cqw; left: 4cqw; width: 92cqw; height: 92cqw; border-radius: 50%;
@@ -129,4 +129,4 @@
   .elite-primordial-sun { animation: none !important; }
 }
 
-.r-primordiale .c-aura { background: conic-gradient(from var(--ang), #f9db83, #ad702b, #fff6c7, #b97622, #f9db83); }
+.r-primordiale:not(.is-special-edition) .c-aura { background: conic-gradient(from var(--ang), #f9db83, #ad702b, #fff6c7, #b97622, #f9db83); }

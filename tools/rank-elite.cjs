@@ -16,9 +16,10 @@ const score = c => Number(c.fav) || 0;
 const bySeries = new Map(data.series.map(s => [s.id, data.cards.filter(c => c.serie === s.id)]));
 const used = new Set(), images = new Set(), art = new Set(), selected = new Map();
 const report = {source: data.source, popularity: 'Recorded AniList favourites (fav); not a live ranking',
-  policy: 'Per anime, popularity descending: Astral, Primordiale, Secrete, Mythique, Legendaire. No repeated characters or portraits across these five tiers. Shared characters belong to the most popular eligible series. IDs, card numbers, names and images are preserved; unused variants become Epique.',
+  policy: 'Ordinary anime, popularity descending: Astral, Primordiale, Secrete, Mythique, Legendaire. No repeated characters or portraits across these five tiers; special editions are exempt and unchanged. Shared ordinary characters belong to the most popular eligible series. IDs, card numbers, names and images are preserved; unused ordinary variants become Epique.',
   series: [], changes: []};
-const ordered = [...data.series].sort((a,b) => Number(!!a.special) - Number(!!b.special) || (b.pop || 0) - (a.pop || 0) || a.id.localeCompare(b.id));
+const specialIds=new Set(data.series.filter(s=>s.special).map(s=>s.id));
+const ordered = data.series.filter(s=>!s.special).sort((a,b) => (b.pop || 0) - (a.pop || 0) || a.id.localeCompare(b.id));
 for (const s of ordered) {
   const cards = bySeries.get(s.id);
   const candidates = new Map();
@@ -48,6 +49,7 @@ for (const s of ordered) {
   report.series.push({id:s.id,name:s.name,assignments,unfilled:desired.length-assignments.length});
 }
 for (const c of data.cards) {
+  if(specialIds.has(c.serie))continue;
   const before = c.rarity;
   c.rarity = selected.get(c.id) || (tiers.includes(c.rarity) ? 'epique' : c.rarity);
   if (before !== c.rarity) {
@@ -58,7 +60,7 @@ for (const c of data.cards) {
 }
 assert.equal(data.cards.length, original.cards.length);
 for(let i=0;i<data.cards.length;i++) for(const k of ['id','num','serie','name','native','img','art','fav']) assert.deepEqual(data.cards[i][k],original.cards[i][k],k);
-const elite=data.cards.filter(c=>tiers.includes(c.rarity));
+const elite=data.cards.filter(c=>tiers.includes(c.rarity)&&!specialIds.has(c.serie));
 for(const key of [identity,portrait]) assert.equal(new Set(elite.map(key)).size,elite.length,'Elite duplicates');
 report.totalCards=data.cards.length;
 report.totalElite=elite.length;

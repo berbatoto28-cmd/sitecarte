@@ -35,6 +35,8 @@ export function cardHTML(id, opts) {
   const s = S.serie[c.serie] || { name: '', color: '#8b5cf6' };
   const full = true;
   const cls = ['card', `r-${c.rarity}`];
+  const legacySpecial = !!s.special && c.serie !== 'lol-runeterra';
+  if (legacySpecial) cls.push('is-special-edition');
   if (c.serie === 'lol-runeterra') cls.push('is-lol');
   if (opts.missing) cls.push('is-unowned');
   if (full) cls.push('full');
@@ -51,7 +53,9 @@ export function cardHTML(id, opts) {
   if (full) {
     const isP = c.rarity === 'primordiale';
     const isS = c.rarity === 'secrete';
-    const eliteIdentity = isP
+    const eliteIdentity = legacySpecial
+      ? (isP ? '<div class="c-galaxy"></div>' : '')
+      : isP
       ? '<div class="elite-primordial-sun" aria-hidden="true"></div><div class="elite-primordial-runes" aria-hidden="true"></div>'
       : isS
         ? '<div class="elite-secret-cipher" aria-hidden="true"></div><div class="elite-secret-sigil" aria-hidden="true"></div>'
