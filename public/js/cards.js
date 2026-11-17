@@ -35,6 +35,7 @@ export function cardHTML(id, opts) {
   const s = S.serie[c.serie] || { name: '', color: '#8b5cf6' };
   const full = true;
   const cls = ['card', `r-${c.rarity}`];
+  if (c.serie === 'lol-runeterra') cls.push('is-lol');
   if (opts.missing) cls.push('is-unowned');
   if (full) cls.push('full');
   if (c.theme) cls.push(`t-${c.theme}`);
@@ -81,6 +82,7 @@ export function cardHTML(id, opts) {
 function astralHTML(c, opts = {}) {
   const serie = S.serie[c.serie] || {name:'Univers',color:'#b7a0ff'};
   const classes = ['card','r-astral','t-astral','full'];
+  if (c.serie === 'lol-runeterra') classes.push('is-lol');
   if (opts.missing) classes.push('is-unowned');
 
   if (!opts.static) classes.push('is-click');
