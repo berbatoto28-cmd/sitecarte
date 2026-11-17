@@ -140,7 +140,9 @@ export function packHTML(kind, opts) {
     const s = S.serie[opts.serie] || { name: 'Édition spéciale', theme: 'legends', color: '#e11d48' };
     p1 = s.color; p2 = '#1e0a3c';
     extra = ` pack--theme t-${esc(s.theme || 'legends')}`;
-    art = `<div class="pa-theme">${icon((THEMES[s.theme] || THEMES.legends).icon)}</div>`;
+    art = s.id === 'lol-runeterra'
+      ? `<img class="pa-bg" src="${esc(s.cover)}" alt="" loading="lazy" referrerpolicy="no-referrer" style="object-fit:cover;object-position:center;filter:saturate(1.2) contrast(1.1)"><div class="pa-theme" style="filter:drop-shadow(0 0 12px #bd81ff)">✦</div>`
+      : `<div class="pa-theme">${icon((THEMES[s.theme] || THEMES.legends).icon)}</div>`;
     const size = s.name.length <= 12 ? 10 : 7.8;
     label = `<b style="font-size:${size}cqw">${esc(s.name)}</b><span>Édition spéciale</span>`;
     badge = '<span class="pack-badge">COLLECTOR</span>';
