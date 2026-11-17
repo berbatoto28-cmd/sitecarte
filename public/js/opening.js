@@ -41,7 +41,7 @@ export function openDaily(btn) {
 export function chooseSpecial(title) {
   return new Promise((resolve) => {
     const sets = S.series.filter((s) => s.special);
-    const m = openModal(`<h3>${esc(title || 'Quelle édition spéciale ?')}</h3><p>Édition collector : 10 % de chance par pack d’obtenir une carte exclusive. Les cartes exclusives sont Légendaires ou mieux, mais jamais garanties.</p>
+    const m = openModal(`<h3>${esc(title || 'Quelle édition spéciale ?')}</h3><p>Édition collector : toute Légendaire ou supérieure est une carte spéciale exclusive de l’édition choisie, jamais une version normale. Bonus collector de 10 % ; aucune Légendaire garantie hors fidélité.</p>
       <div class="special-grid" style="grid-template-columns:1fr">${sets.map((s) => `<button class="stile special t-${esc(s.theme)}" type="button" data-set="${esc(s.id)}" style="--sc:${esc(s.color)}">
         <div class="pa-theme">${icon(s.theme === 'summer' ? 'sun' : s.theme === 'villains' ? 'skull' : 'flame')}</div>
         <div class="st-info"><b>${esc(s.name)}</b><p>${esc(s.desc || '')}</p></div></button>`).join('')}</div>`, { onClose: (v) => resolve(v || null) });

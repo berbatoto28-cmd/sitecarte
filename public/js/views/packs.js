@@ -68,7 +68,7 @@ export function render(ctx) {
           ${packHTML('special', { serie: s.id })}
           <h3>${esc(s.name)}</h3>
           <p>${esc(s.desc || 'Édition collector à drop rare.')}</p>
-          <p class="dim" style="font-size:12px;margin:8px 0">${s.id==='lol-runeterra' ? 'Toutes les cartes de ce booster proviennent de League of Legends.' : 'Légendaire, Mythique, Secrète, Primordiale et Astrale : uniquement de cette édition.'}</p>
+          <p class="dim" style="font-size:12px;margin:8px 0">${s.id==='lol-runeterra' ? 'Toutes les cartes de ce booster proviennent de League of Legends.' : 'Légendaire ou plus : uniquement les cartes collector EXCLUSIVES de cette édition. Les versions normales ne sortent pas.'}</p>
           <div class="pack-odds"><b>${pctTxt(atLeastOne(s.id==='lol-runeterra'?{...P.special,editionChance:0}:P.special, 'legendaire'))}</b><span>de Légendaire ou mieux par pack</span><em>${b.owned}/${b.total} cartes collectionnées</em></div>
           <div class="pack-actions-stack">
             <button class="btn btn-gold" type="button" data-buy-special="${esc(s.id)}">Ouvrir ×1 · ${coin()} ${fmt(P.special.price)}</button>

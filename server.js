@@ -357,6 +357,15 @@ function openPack(uid, type, serie, source) {
   const u = getUser(uid);
   const pityHit = u.pity + 1 >= G.SETTINGS.pityLimit;
   const drawn = G.drawPack(type, serie, pityHit);
+  // Dernier verrou avant attribution (transactions ×1 et ×10 comprises).
+  // Aucune carte Légendaire+ ordinaire ne peut être attribuée depuis une
+  // édition collector Légendes, Méchants ou Summer Waifus.
+  if (G.PACKS[type]?.perSet && serie !== 'lol-runeterra' && drawn.some((c) =>
+    G.RANK[c.rarity] >= G.RANK.legendaire
+      ? !G.isEditionCollector(c, serie)
+      : !!G.SERIE[c.serie]?.special)) {
+    throw new Oops('Tirage hors édition bloqué. Aucun pack ni Coin débité.', 500);
+  }
   const bonus = type === 'secretgift' || G.PACKS[type].perSet ? null : G.drawSpecialBonus();
   if (bonus) drawn.push(bonus);
   const now = Date.now();

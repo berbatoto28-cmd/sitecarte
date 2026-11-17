@@ -152,3 +152,8 @@ les nouvelles animations sans changer la collection ou les Coins.
 - Les 10 % de bonus collector et la garantie de fidélité (Légendaire) conservent la même restriction ; ouvertures unitaires, multiples et de réserve identiques.
 - Aucune modification des collections de joueurs et aucun rétroactif sur les anciens packs.
 - Tests serveur : `node lib/test-special-edition-pools.cjs` (exécuté automatiquement au build Railway).
+
+
+## Collectors exclusifs dans les packs Légendes et Méchants
+
+Les boosters Légendes du Shōnen, Les Grands Méchants et Summer Waifus utilisent exclusivement leurs **propres cartes collector** en Légendaire, Mythique, Secrète, Primordiale ou Astrale. Les cartes normales Légendaires+ des séries classiques sont exclues, y compris lors des remplacements collectors et des garanties de fidélité. Les Communes, Rares et Épiques restent ordinaires. Le serveur revalide cette règle avant d’attribuer les cartes aux joueurs, dans les ouvertures ×1 et ×10 ainsi que depuis l’inventaire. Aucune carte ancienne ni progression n’est modifiée.
