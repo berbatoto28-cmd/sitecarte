@@ -128,3 +128,5 @@
 @media (prefers-reduced-motion: reduce) {
   .elite-primordial-sun { animation: none !important; }
 }
+
+.r-primordiale .c-aura { background: conic-gradient(from var(--ang), #f9db83, #ad702b, #fff6c7, #b97622, #f9db83); }
