@@ -699,3 +699,7 @@ button.card, a.card { border: 0; padding: 0; background: none; cursor: pointer; 
 .card.full .c-line { font-size: 3.3cqw; }
 .card.r-commune .c-holo,.card.r-commune .c-sparkle { display:none; }
 .card.r-rare .c-sparkle { display:none; }
+
+/* Riot portrait assets already center each champion; preserve their top edge. */
+.card.is-lol.full .c-art img,
+.card.is-lol.r-astral .astral-backdrop img { object-position:50% 0%; }
