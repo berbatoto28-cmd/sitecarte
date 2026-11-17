@@ -21,5 +21,7 @@ RUN cat /tmp/v20-parts/part-*.bin > /tmp/animeconnection-v20.zip \
 COPY server.js package.json /app/
 COPY lib/ /app/lib/
 COPY public/ /app/public/
+# Corrected static catalogue only: never copy or replace a player database.
+COPY data/cards.json /app/data/cards.json
 EXPOSE 3000
 CMD ["node", "--disable-warning=ExperimentalWarning", "server.js"]

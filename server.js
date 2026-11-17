@@ -1136,7 +1136,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method !== 'GET') { res.writeHead(405); return res.end(); }
     try {
       db.prepare('SELECT 1 AS ready').get();
-      return sendJSON(req, res, 200, { ok: true, app: 'AnimeConnection', version: '20-public-collections' });
+      return sendJSON(req, res, 200, { ok: true, app: 'AnimeConnection', version: '20-elite-popularity-unique' });
     } catch (e) {
       console.error('[health] SQLite indisponible', e);
       return sendJSON(req, res, 503, { ok: false });

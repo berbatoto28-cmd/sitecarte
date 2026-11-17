@@ -50,8 +50,14 @@ export function cardHTML(id, opts) {
   let inner;
   if (full) {
     const isP = c.rarity === 'primordiale';
+    const isS = c.rarity === 'secrete';
+    const eliteIdentity = isP
+      ? '<div class="elite-primordial-sun" aria-hidden="true"></div><div class="elite-primordial-runes" aria-hidden="true"></div>'
+      : isS
+        ? '<div class="elite-secret-cipher" aria-hidden="true"></div><div class="elite-secret-sigil" aria-hidden="true"></div>'
+        : '';
     inner = art +
-      (isP ? '<div class="c-galaxy"></div>' : '') +
+      eliteIdentity +
       '<div class="c-holo"></div><div class="c-shade"></div><div class="c-themefx"></div><div class="c-inner"></div>' +
       `<div class="c-emblem">${icon(isP ? 'crown' : 'spark')}${esc(r.label)}</div>` + theme +
       `<div class="c-plate"><span class="c-name ${nc}">${esc(c.name)}</span>` +
