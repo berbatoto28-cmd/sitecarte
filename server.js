@@ -158,6 +158,19 @@ CREATE TABLE IF NOT EXISTS feed (
   card TEXT NOT NULL,
   at INTEGER NOT NULL
 );
+CREATE TABLE IF NOT EXISTS admin_coin_audit (
+  id INTEGER PRIMARY KEY,
+  operator_id INTEGER NOT NULL,
+  operator_name TEXT NOT NULL,
+  target_id INTEGER NOT NULL,
+  target_name TEXT NOT NULL,
+  delta INTEGER NOT NULL,
+  balance_before INTEGER NOT NULL,
+  balance_after INTEGER NOT NULL,
+  reason TEXT NOT NULL,
+  at INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS admin_coin_audit_at ON admin_coin_audit(at DESC);
 `);
 // Mise à niveau des bases créées par une version précédente
 if (!db.prepare('PRAGMA table_info(users)').all().some((c) => c.name === 'coll_ver')) {
@@ -715,6 +728,56 @@ route('GET', '/api/admin/players', ({ uid, query }) => {
     : 'SELECT id, name, coins, created_at, last_seen FROM users ORDER BY last_seen DESC LIMIT 40';
   const players = search ? q(sql).all(pattern) : q(sql).all();
   return { players, limited: 40 };
+});
+
+/* --- ajustements de Coins par AdminLucifer, transaction et journal conservés --- */
+route('POST', '/api/admin/coins/adjust', ({ req, uid, body }) => {
+  requireAdmin(uid);
+  // Empêche l'utilisation de la session via une page d'un autre domaine.
+  const expectedOrigin = (isHttps(req) ? 'https://' : 'http://') + req.headers.host;
+  if (!req.headers.origin || req.headers.origin !== expectedOrigin) {
+    throw new Oops('Origine de la requête non autorisée.', 403);
+  }
+  rateLimit(req, 'admin-coins', 40, 10 * 60 * 1000);
+  const playerId = body.playerId;
+  const amount = body.amount;
+  const action = body.action;
+  const expectedBalance = body.expectedBalance;
+  if (!Number.isSafeInteger(playerId) || playerId < 1) throw new Oops('Compte invalide.');
+  if (!Number.isSafeInteger(amount) || amount < 1 || amount > 100000000) {
+    throw new Oops('Montant : entre 1 et 100 000 000 Coins par opération.');
+  }
+  if (action !== 'give' && action !== 'remove') throw new Oops('Action invalide.');
+  if (!Number.isSafeInteger(expectedBalance) || expectedBalance < 0) {
+    throw new Oops('Solde de référence invalide. Rechargez les joueurs.');
+  }
+  if (typeof body.reason !== 'string' || body.reason.length > 120) throw new Oops('Motif invalide.');
+  const reason = body.reason.trim() || 'Ajustement manuel';
+  return tx(() => {
+    const target = q('SELECT id, name, coins FROM users WHERE id = ?').get(playerId);
+    if (!target) throw new Oops('Joueur introuvable.', 404);
+    if (target.coins !== expectedBalance) {
+      throw new Oops('Le solde a changé. Actualisez la liste des joueurs.', 409);
+    }
+    const delta = action === 'give' ? amount : -amount;
+    const next = target.coins + delta;
+    if (!Number.isSafeInteger(next) || next < 0 || next > 2000000000) {
+      throw new Oops(next < 0 ? 'Retrait impossible : solde insuffisant.' : 'Le nouveau solde dépasserait 2 milliards de Coins.');
+    }
+    const updated = q('UPDATE users SET coins = ? WHERE id = ? AND coins = ?')
+      .run(next, target.id, target.coins);
+    if (!updated.changes) throw new Oops('Le solde a changé. Actualisez les joueurs.', 409);
+    const operator = getUser(uid);
+    q('INSERT INTO admin_coin_audit (operator_id, operator_name, target_id, target_name, delta, balance_before, balance_after, reason, at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
+      .run(uid, operator.name, target.id, target.name, delta, target.coins, next, reason, Date.now());
+    return { ok: true, player: { id: target.id, name: target.name, coins: next }, previousBalance: target.coins, delta };
+  });
+});
+
+route('GET', '/api/admin/coins/history', ({ uid }) => {
+  requireAdmin(uid);
+  const operations = q('SELECT id, operator_name, target_name, delta, balance_before, balance_after, reason, at FROM admin_coin_audit ORDER BY id DESC LIMIT 30').all();
+  return { operations };
 });
 
 /* Démo d'animation : tirage contrôlé, strictement sans récompense en base.

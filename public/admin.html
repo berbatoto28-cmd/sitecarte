@@ -30,6 +30,18 @@
     th{color:#c7b9d7;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em}
     .scroll{overflow-x:auto}
     .notice{line-height:1.6}
+    .action{font-size:.85rem;padding:.55rem .8rem;white-space:nowrap}
+    button:disabled{opacity:.5;cursor:not-allowed}
+    .coin-panel{margin-top:1.2rem;background:#130b27}
+    .coin-panel label{display:block;margin:.6rem 0 .3rem;color:#d9c9ec;font-size:.88rem}
+    .coin-panel input{width:100%}
+    .actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.2rem}
+    .danger{background:linear-gradient(115deg,#ff9cad,#ffccd4)}
+    .success{color:#bbffd4}
+    .error{color:#ffb1c3}
+    .history{margin-top:1.2rem}
+    .history .positive{color:#a0ffce}
+    .history .negative{color:#ff9cbb}
     [hidden]{display:none!important}
     footer{text-align:center;color:#9083a6;padding:2rem 1rem;font-size:.85rem}
   </style>
@@ -47,13 +59,33 @@
     <div id="stats" class="grid"></div>
     <section class="section">
       <h2>Joueurs</h2>
-      <p class="muted">Recherche des comptes et consultation des informations de jeu. Les opérations sur les comptes ne sont pas disponibles dans cette version.</p>
+      <p class="muted">Choisis un joueur pour ajouter ou retirer ses Coins. Une confirmation est demandée avant toute opération.</p>
       <form class="toolbar" id="search-form">
         <input id="search" type="search" autocomplete="off" placeholder="Rechercher un pseudo" aria-label="Rechercher un pseudo" maxlength="40">
         <button type="submit">Rechercher</button>
       </form>
-      <div class="scroll"><table><thead><tr><th>Compte</th><th>Coins</th><th>Création</th><th>Dernière activité</th></tr></thead><tbody id="players"></tbody></table></div>
+      <div class="scroll"><table><thead><tr><th>Compte</th><th>Coins</th><th>Création</th><th>Dernière activité</th><th>Gestion</th></tr></thead><tbody id="players"></tbody></table></div>
       <p id="player-note" class="muted"></p>
+      <div id="coin-panel" class="section coin-panel" hidden>
+        <h2>Gérer les Coins de <span id="selected-name"></span></h2>
+        <p class="muted">Solde actuel : <b id="selected-balance"></b> Coins</p>
+        <label for="coin-amount">Quantité de Coins</label>
+        <input id="coin-amount" type="number" inputmode="numeric" min="1" max="100000000" step="1" placeholder="Exemple : 5000" required>
+        <label for="coin-reason">Motif (facultatif, enregistré dans l'historique)</label>
+        <input id="coin-reason" type="text" maxlength="120" placeholder="Exemple : récompense événement">
+        <div class="actions">
+          <button type="button" id="give-coins">+ Donner des Coins</button>
+          <button type="button" id="remove-coins" class="danger">− Retirer des Coins</button>
+          <button type="button" id="cancel-coins">Annuler</button>
+        </div>
+        <p id="coin-message" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+    <section class="section history" aria-label="Historique des opérations sur les Coins">
+      <h2>Historique des ajustements</h2>
+      <p class="muted">Les 30 dernières modifications, conservées dans la base de données.</p>
+      <div class="scroll"><table><thead><tr><th>Date</th><th>Joueur</th><th>Modification</th><th>Nouveau solde</th><th>Motif</th><th>Par</th></tr></thead><tbody id="history"></tbody></table></div>
+      <p id="history-note" class="muted"></p>
     </section>
   </div>
 </main>
