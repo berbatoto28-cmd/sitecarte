@@ -154,7 +154,16 @@ export function packHTML(kind, opts) {
     extra = ` pack--theme t-${esc(s.theme || 'legends')}`;
     art = s.id === 'lol-runeterra'
       ? `<img class="pa-bg" src="${esc(s.cover)}" alt="" loading="lazy" referrerpolicy="no-referrer" style="object-fit:cover;object-position:center;filter:saturate(1.2) contrast(1.1)"><div class="pa-theme" style="filter:drop-shadow(0 0 12px #bd81ff)">✦</div>`
-      : `<div class="pa-theme">${icon((THEMES[s.theme] || THEMES.legends).icon)}</div>`;
+      : s.id === 'summer'
+        // Trois illustrations locales de Summer Waifus pour un véritable booster
+        // illustré, comme League of Legends (aucun portrait externe fragile).
+        ? `<div class="pa-summer-gallery" aria-hidden="true">
+            <img class="pa-summer-figure left" src="/art/SUM-N26-MIKASA.webp" alt="" loading="lazy" draggable="false">
+            <img class="pa-summer-figure right" src="/art/SUM-N26-REM.webp" alt="" loading="lazy" draggable="false">
+            <img class="pa-summer-figure center" src="/art/SUM-N26-LUCY.webp" alt="" loading="lazy" draggable="false">
+            <span class="pa-summer-glow"></span>
+          </div>`
+        : `<div class="pa-theme">${icon((THEMES[s.theme] || THEMES.legends).icon)}</div>`;
     const size = s.name.length <= 12 ? 10 : 7.8;
     label = `<b style="font-size:${size}cqw">${esc(s.name)}</b><span>Édition spéciale</span>`;
     badge = '<span class="pack-badge">COLLECTOR</span>';
