@@ -7,7 +7,7 @@ const output = process.argv[3];
 if (!input || !output) throw Error('Usage: node tools/rank-elite.cjs input.json output.json [report.json]');
 const data = JSON.parse(fs.readFileSync(input, 'utf8'));
 const original = structuredClone(data);
-const tiers = ['astral', 'primordiale', 'secrete'];
+const tiers = ['astral', 'primordiale', 'secrete', 'mythique', 'legendaire'];
 const norm = x => String(x || '').normalize('NFKD').replace(/\p{M}/gu, '').toLowerCase().replace(/[^a-z0-9]/g, '');
 const portrait = c => String(c.img || '').split(/[?#]/)[0].toLowerCase();
 const identity = c => c.championId ? 'riot:' + c.championId :
@@ -16,7 +16,7 @@ const score = c => Number(c.fav) || 0;
 const bySeries = new Map(data.series.map(s => [s.id, data.cards.filter(c => c.serie === s.id)]));
 const used = new Set(), images = new Set(), art = new Set(), selected = new Map();
 const report = {source: data.source, popularity: 'Recorded AniList favourites (fav); not a live ranking',
-  policy: 'Per anime: Astral, then Primordiale, then up to three Secrete. Shared characters belong to the most popular eligible series; no global elite repeats. Existing IDs, numbers, names and images are preserved.',
+  policy: 'Per anime, popularity descending: Astral, Primordiale, Secrete, Mythique, Legendaire. No repeated characters or portraits across these five tiers. Shared characters belong to the most popular eligible series. IDs, card numbers, names and images are preserved; unused variants become Epique.',
   series: [], changes: []};
 const ordered = [...data.series].sort((a,b) => Number(!!a.special) - Number(!!b.special) || (b.pop || 0) - (a.pop || 0) || a.id.localeCompare(b.id));
 for (const s of ordered) {
@@ -49,10 +49,10 @@ for (const s of ordered) {
 }
 for (const c of data.cards) {
   const before = c.rarity;
-  c.rarity = selected.get(c.id) || (tiers.includes(c.rarity) ? 'mythique' : c.rarity);
+  c.rarity = selected.get(c.id) || (tiers.includes(c.rarity) ? 'epique' : c.rarity);
   if (before !== c.rarity) {
     if(c.rarity==='astral') {c.astral=true;c.v='a';}
-    else {delete c.astral; if(c.theme==='astral') delete c.theme; if(tiers.includes(c.rarity)) c.v=c.rarity==='primordiale'?'p':'s';else delete c.v;}
+    else {delete c.astral; if(c.theme==='astral') delete c.theme; if(c.rarity==='primordiale'||c.rarity==='secrete') c.v=c.rarity==='primordiale'?'p':'s';else delete c.v;}
     report.changes.push({id:c.id,num:c.num,name:c.name,from:before,to:c.rarity});
   }
 }

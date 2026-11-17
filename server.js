@@ -569,6 +569,8 @@ const catalogOrder = new Map(G.CARDS.map((c, i) => [c.id, i]));
 const catalogSerieOrder = new Map(G.SERIES.map((s, i) => [s.id, i]));
 const catalogGroupedOrder = new Map(G.CARDS.slice().sort((a, b) =>
   (catalogSerieOrder.get(a.serie) ?? 1e9) - (catalogSerieOrder.get(b.serie) ?? 1e9) ||
+  G.RANK[b.rarity] - G.RANK[a.rarity] ||
+  (b.fav || 0) - (a.fav || 0) ||
   (Number(a.num.match(/-(\d+)$/)?.[1]) || 0) - (Number(b.num.match(/-(\d+)$/)?.[1]) || 0) ||
   catalogOrder.get(a.id) - catalogOrder.get(b.id)
 ).map((c, i) => [c.id, i]));
@@ -624,7 +626,7 @@ route('GET', '/api/series/:id', ({ uid, params }) => {
   if (!s) throw new Oops('Série introuvable.', 404);
   const ids = G.RARITIES.flatMap((r) => G.BY_SERIE[s.id][r.id].map((c) => c.id));
   const cards = cardsFor(uid, ids);
-  const order = ids.map((id) => cards[id]).sort((a, b) => a.num.localeCompare(b.num));
+  const order = ids.map((id) => cards[id]).sort((a, b) => G.RANK[b.rarity] - G.RANK[a.rarity] || (b.fav || 0) - (a.fav || 0) || a.num.localeCompare(b.num));
   return { serie: s, cards: order };
 }, { public: true });
 
@@ -1166,7 +1168,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method !== 'GET') { res.writeHead(405); return res.end(); }
     try {
       db.prepare('SELECT 1 AS ready').get();
-      return sendJSON(req, res, 200, { ok: true, app: 'AnimeConnection', version: '20-variants-separated-missions-bulk' });
+      return sendJSON(req, res, 200, { ok: true, app: 'AnimeConnection', version: '20-legend-to-astral-ranked' });
     } catch (e) {
       console.error('[health] SQLite indisponible', e);
       return sendJSON(req, res, 503, { ok: false });

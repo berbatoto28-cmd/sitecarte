@@ -15,6 +15,12 @@ d=await api('/api/catalog?player=TestBob&show=missing');assert.equal(d.total,G.C
 d=await api('/api/catalog?player=TestBob&serie='+astral.serie+'&rarity=astral&show=owned');assert.deepEqual(d.ids,[astral.id]);assert(d.stats.series[astral.serie].pct>0);
 d=await api('/api/players/TestBob');assert.equal(d.player.stats.uniq,2);assert.equal(d.player.stats.dupes,2);
 d=await api('/api/series/'+astral.serie);assert(d.cards.some(c=>c.id===astral.id&&c.name&&!c.hidden));
+for(let i=1;i<d.cards.length;i++)assert(G.RANK[d.cards[i-1].rarity]>=G.RANK[d.cards[i].rarity],'Series sorted by rarity descending');
+d=await api('/api/catalog?serie=naruto&sort=num&limit=72');
+for(let i=1;i<d.ids.length;i++){const a=d.cards[d.ids[i-1]],b=d.cards[d.ids[i]];assert(G.RANK[a.rarity]>=G.RANK[b.rarity],'Default anime catalogue rarity descending');if(a.rarity===b.rarity)assert(a.fav>=b.fav,'Popularity tie-break');}
+d=await api('/api/catalog?sort=num&limit=72');
+const finished=new Set();let current='';let previous;
+for(const id of d.ids){const c=d.cards[id];if(c.serie!==current){assert(!finished.has(c.serie),'Anime stays grouped');if(current)finished.add(current);current=c.serie;previous=null;}if(previous)assert(G.RANK[previous.rarity]>=G.RANK[c.rarity],'Grouped catalogue rarity descending');previous=c;}
 for(const c of G.CARDS)assert.equal(G.maskCard(c,false),c);
 for(const p of ['/api/static','/api/feed','/api/leaderboard','/api/players','/api/market','/api/trades'])await api(p);
 console.log('PASS: full catalogue, all rarity metadata, character search, other player ownership/missing/duplicates, combined filters, series progress, profiles, series visibility and existing read APIs; '+G.CARDS.length+' IDs unchanged.');

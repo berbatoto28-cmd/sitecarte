@@ -4,7 +4,7 @@ import { cardHTML } from '../cards.js';
 
 const F = { q: '', serie: '', rar: new Set(), show: 'all', sort: 'num', page: 1 };
 const SHOWS = [['all', 'Afficher : toutes'], ['owned', 'Possédées'], ['missing', 'Manquantes'], ['dupes', 'Doublons'], ['new', 'Nouvelles']];
-const SORTS = [['num', 'Série puis numéro'], ['rarity', 'Rareté'], ['fav', 'Popularité'], ['name', 'Nom'], ['qty', 'Exemplaires']];
+const SORTS = [['num', 'Série puis rareté décroissante'], ['rarity', 'Rareté décroissante'], ['fav', 'Popularité'], ['name', 'Nom'], ['qty', 'Exemplaires']];
 const PAGE_SIZE = 48;
 const labelSerie = (s) => s.id === 'dbz' ? 'Dragon Ball Z (DBZ)' : s.name;
 const norm = (v) => String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
