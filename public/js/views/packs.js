@@ -61,6 +61,7 @@ export function render(ctx) {
         const b = st.byS[s.id];
         return `<div class="panel pack-tile pack-tile-special t-${esc(s.theme || 'legends')}" style="--sc:${esc(s.color)};${s.id==='lol-runeterra'?'border:2px solid #ddbaff;box-shadow:0 0 35px #995af966;background:linear-gradient(150deg,#29154a,#120c21);':''}">
           ${s.id==='lol-runeterra'?'<div style="padding:7px 11px;margin:0 auto 12px;width:max-content;border-radius:99px;background:linear-gradient(95deg,#f1cf85,#a875ef);color:#170a29;font-weight:900;letter-spacing:.13em;font-size:11px">✦ NOUVEAUTÉ · EN VEDETTE ✦</div>':''}
+          ${/summer|waifu/i.test(s.name)?'<div style="padding:7px 11px;margin:0 auto 12px;width:max-content;border-radius:99px;background:linear-gradient(95deg,#ffe2a7,#ff9fcf);color:#2e1332;font-weight:900;letter-spacing:.06em;font-size:11px">☀ 12 NOUVELLES CARTES · LÉGENDAIRE → SECRÈTE</div>':''}
           ${packHTML('special', { serie: s.id })}
           <h3>${esc(s.name)}</h3>
           <p>${esc(s.desc || 'Édition collector à drop rare.')}</p>
