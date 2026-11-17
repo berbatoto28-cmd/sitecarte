@@ -818,6 +818,36 @@ route('POST', '/api/avatar', ({ uid, body }) => {
 /* --- missions --- */
 route('GET', '/api/missions', ({ uid }) => ({ missions: missionsState(uid) }));
 
+route('POST', '/api/missions/claim-all', ({ uid }) => {
+  const result = tx(() => {
+    const ms = missionsState(uid);
+    const day = ms.day;
+    const ready = [];
+    for (const m of [...ms.daily, ms.bonus]) {
+      if (!m.claimed && m.progress >= m.target) ready.push({id:m.id, reward:m.reward, daily:true});
+    }
+    for (const state of ms.achievements) {
+      const def = G.ACH[state.id];
+      if (!state.claimed && state.progress >= def.target) ready.push({id:state.id,reward:def.reward});
+    }
+    // Include every started series, even those beyond the first 36 UI panels.
+    for (const s of ms.series) for (const st of G.SERIE_STEPS) {
+      const step = G.serieStep(s.id, st.k);
+      if (step && s.owned >= step.target && !s.claimed.includes(step.k)) ready.push({id:`s_${s.id}_${step.k}`,reward:step.reward});
+    }
+    const reward = {coins:0,packs:{}};
+    for (const m of ready) {
+      if (m.daily) q('UPDATE daily SET claimed = 1 WHERE user_id = ? AND day = ? AND mission = ? AND claimed = 0').run(uid,day,m.id);
+      else q('INSERT INTO achievements (user_id, id, claimed_at) VALUES (?, ?, ?)').run(uid,m.id,Date.now());
+      grantReward(uid,m.reward);
+      reward.coins += m.reward.coins || 0;
+      for (const [pack,n] of Object.entries(m.reward.packs || {})) reward.packs[pack]=(reward.packs[pack] || 0)+n;
+    }
+    return {reward,claimed:ready.map(m=>m.id),count:ready.length};
+  });
+  return {...result, missions:missionsState(uid),me:meState(uid)};
+});
+
 route('POST', '/api/missions/claim', ({ uid, body }) => {
   const id = String(body.id || '');
   const reward = tx(() => {
@@ -1136,7 +1166,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method !== 'GET') { res.writeHead(405); return res.end(); }
     try {
       db.prepare('SELECT 1 AS ready').get();
-      return sendJSON(req, res, 200, { ok: true, app: 'AnimeConnection', version: '20-elite-popularity-unique' });
+      return sendJSON(req, res, 200, { ok: true, app: 'AnimeConnection', version: '20-elite-unique-missions-bulk' });
     } catch (e) {
       console.error('[health] SQLite indisponible', e);
       return sendJSON(req, res, 503, { ok: false });
