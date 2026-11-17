@@ -152,11 +152,12 @@ export function packHTML(kind, opts) {
     const s = S.serie[opts.serie] || { name: 'Édition spéciale', theme: 'legends', color: '#e11d48' };
     p1 = s.color; p2 = '#1e0a3c';
     extra = ` pack--theme t-${esc(s.theme || 'legends')}`;
-    // Couvertures collector officielles des packs Légendes / Méchants.
-    // Ce sont des illustrations COMPLÈTES (texte et foil inclus).
-    // Ne pas superposer le gabarit générique ou ses titres par-dessus.
+    // Couvertures collector complètes des trois éditions anime.
+    // L'illustration inclut déjà le foil, le logo, le badge et le titre :
+    // ne surtout pas superposer le gabarit générique.
     const collectorCover = s.id === 'legends' ? '/art/packs/legends-collector.webp'
-      : s.id === 'villains' ? '/art/packs/villains-collector.webp' : null;
+      : s.id === 'villains' ? '/art/packs/villains-collector.webp'
+      : s.id === 'summer' ? '/art/packs/summer-collector.avif' : null;
     if (collectorCover) {
       return `<div class="pack pack--special${extra} pack--collector-illustrated" style="--p1:${esc(p1)};--p2:${esc(p2)}" aria-hidden="true"><div class="pack-inner"><img class="pa-full-pack" src="${collectorCover}" alt="" loading="lazy" draggable="false"></div></div>`;
     }
