@@ -64,7 +64,7 @@ export function render(ctx) {
           ${packHTML('special', { serie: s.id })}
           <h3>${esc(s.name)}</h3>
           <p>${esc(s.desc || 'Édition collector à drop rare.')}</p>
-          <div class="pack-odds"><b>${pctTxt(atLeastOne(P.special, 'legendaire'))}</b><span>de Légendaire ou mieux par pack</span><em>${b.owned}/${b.total} cartes collectionnées</em></div>
+          <div class="pack-odds"><b>${pctTxt(atLeastOne(s.id==='lol-runeterra'?{...P.special,editionChance:0}:P.special, 'legendaire'))}</b><span>de Légendaire ou mieux par pack</span><em>${b.owned}/${b.total} cartes collectionnées</em></div>
           <div class="pack-actions-stack">
             <button class="btn btn-gold" type="button" data-buy-special="${esc(s.id)}">Ouvrir ×1 · ${coin()} ${fmt(P.special.price)}</button>
             <button class="btn btn-ghost btn-bulk" type="button" data-buy-special-ten="${esc(s.id)}" ${S.me.user.coins < P.special.price * 10 ? 'disabled' : ''}>${icon('layers')} Ouvrir ×10 · ${coin()} ${fmt(P.special.price*10)}</button>
