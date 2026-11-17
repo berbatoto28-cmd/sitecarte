@@ -218,3 +218,23 @@
   background:repeating-linear-gradient(90deg,#ffdfaf 0 1cqw,#fcaac0 1cqw 2cqw),
     linear-gradient(180deg,#ffe4c4,#ff8c91);
 }
+
+
+/* Illustrations intégrales des boosters collector Shōnen et Méchants.
+   Garde le conteneur .pack-inner pour les animations de déchirure ×1/×10,
+   sans répéter un second titre/logo sur la couverture déjà composée. */
+.pack--collector-illustrated .pack-inner {
+  background:transparent !important;
+  overflow:hidden;
+  border-radius:2.6cqw;
+}
+.pack--collector-illustrated .pa-full-pack {
+  position:absolute;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:fill;
+  user-select:none;
+  pointer-events:none;
+}
