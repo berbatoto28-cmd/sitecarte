@@ -55,7 +55,7 @@ export function render(ctx) {
   </section>
 
   <section class="section">
-    <h2 class="section-title">${icon('sun')} Éditions spéciales en vedette <small>League of Legends à la une · Même prix que Summer Waifus</small></h2>
+    <h2 class="section-title">${icon('sun')} Éditions spéciales en vedette <small>LoL : 5 cartes LoL · Autres : Légendaire+ exclusivement de l’édition choisie</small></h2>
     <div class="special-editions">
       ${S.series.filter((s) => s.special).map((s) => {
         const b = st.byS[s.id];
@@ -65,6 +65,7 @@ export function render(ctx) {
           ${packHTML('special', { serie: s.id })}
           <h3>${esc(s.name)}</h3>
           <p>${esc(s.desc || 'Édition collector à drop rare.')}</p>
+          <p class="dim" style="font-size:12px;margin:8px 0">${s.id==='lol-runeterra' ? 'Toutes les cartes de ce booster proviennent de League of Legends.' : 'Légendaire, Mythique, Secrète, Primordiale et Astrale : uniquement de cette édition.'}</p>
           <div class="pack-odds"><b>${pctTxt(atLeastOne(s.id==='lol-runeterra'?{...P.special,editionChance:0}:P.special, 'legendaire'))}</b><span>de Légendaire ou mieux par pack</span><em>${b.owned}/${b.total} cartes collectionnées</em></div>
           <div class="pack-actions-stack">
             <button class="btn btn-gold" type="button" data-buy-special="${esc(s.id)}">Ouvrir ×1 · ${coin()} ${fmt(P.special.price)}</button>
@@ -91,7 +92,7 @@ export function render(ctx) {
         <td class="num">${pctTxt(100 * slotRate(null, r.id))}</td>
         ${['standard','celeste','royal','special'].map((k) => `<td class="num">${pctTxt(atLeastOne(P[k], r.id))}</td>`).join('')}</tr>`).join('')}</tbody>
     </table></div>
-    <p class="dim" style="margin:14px 0 0;font-size:14px">Les taux « par pack » représentent la probabilité d’obtenir <b>au moins une carte du niveau indiqué ou supérieur</b>. Le Pack Édition remplace parfois une carte par une collector et la table en tient compte. Les cartes Secrètes et Primordiales restent exceptionnellement rares, même dans les packs Royal et Édition. Les probabilités sont calculées hors garantie de fidélité.</p>
+    <p class="dim" style="margin:14px 0 0;font-size:14px">Les taux « par pack » représentent la probabilité d’obtenir <b>au moins une carte du niveau indiqué ou supérieur</b>. Le Pack Édition réserve toutes ses cartes Légendaires ou supérieures à l’édition sélectionnée, avec une chance additionnelle de collector ; la table en tient compte. Les cartes Secrètes et Primordiales restent exceptionnellement rares, même dans les packs Royal et Édition. Les probabilités sont calculées hors garantie de fidélité.</p>
     <p class="dim" style="margin:10px 0 0;font-size:14px">Fidélité : au ${S.data.settings.pityLimit}<sup>e</sup> pack consécutif sans Légendaire ou mieux, la 5<sup>e</sup> carte devient une <b>Légendaire</b> (jamais Secrète, Primordiale ni Astral). Aucun pack payant en Coins ne garantit de Légendaire.</p>
   </section>`;
 

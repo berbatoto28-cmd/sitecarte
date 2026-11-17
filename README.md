@@ -143,3 +143,12 @@ de carte dans `public/reveals/manifest.json`. Voir `README_REVEAL_4K.md`.
 
 Le **Pack Test Ultime** (5 cartes, mode démo) est conservé pour comparer toutes
 les nouvelles animations sans changer la collection ou les Coins.
+
+
+## Packs Éditions spéciales — règles de tirage (novembre 2026)
+
+- **League of Legends** : 5 cartes exclusivement issues de League of Legends.
+- **Summer Waifus / Légendes du Shōnen / Les Grands Méchants** : les cartes Commune, Rare et Épique sont issues du catalogue normal ; toutes les cartes Légendaires, Mythiques, Secrètes, Primordiales et Astrales sont uniquement celles de l'édition sélectionnée.
+- Les 10 % de bonus collector et la garantie de fidélité (Légendaire) conservent la même restriction ; ouvertures unitaires, multiples et de réserve identiques.
+- Aucune modification des collections de joueurs et aucun rétroactif sur les anciens packs.
+- Tests serveur : `node tools/test-special-edition-pools.cjs` (exécuté automatiquement au build Railway).
