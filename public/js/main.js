@@ -96,6 +96,11 @@ function paintHeader() {
   const c = me.user.avatar && S.card[me.user.avatar];
   av.innerHTML = c ? `<img src="${esc(c.img)}" alt="" referrerpolicy="no-referrer">` : `<span>${esc(me.user.name.slice(0, 1).toUpperCase())}</span>`;
   $('#menu-profile').href = `#/joueur/${encodeURIComponent(me.user.name)}`;
+  const adminLink = $('#menu-admin');
+  if (adminLink) {
+    adminLink.hidden = !me.user.isAdmin;
+    adminLink.style.display = me.user.isAdmin ? 'flex' : 'none';
+  }
   setBadge('trades', me.notif.trades);
   setBadge('missions', me.notif.missions);
   setBadge('fresh', me.fresh.length, true);

@@ -407,7 +407,7 @@ function meState(uid, knownVer) {
   const ms = missionsState(uid, rows);
   const out = {
     astralUnlocked: rows.some((r) => G.CARD[r.card]?.rarity === 'astral'),
-    user: { id: u.id, name: u.name, coins: u.coins, avatar: u.avatar, createdAt: u.created_at, collVer: u.coll_ver },
+    user: { id: u.id, name: u.name, coins: u.coins, avatar: u.avatar, createdAt: u.created_at, collVer: u.coll_ver, isAdmin: isAdminUser(uid) },
     free: freeState(u, now),
     gifts: { secretGiftAvailable: !u.secret_gift_claimed },
     inventory,
@@ -539,6 +539,24 @@ function route(method, pattern, handler, opts) {
 const NAME_RE = /^[\p{L}\p{N}_.-]{3,20}$/u;
 const safeDecode = (s) => { try { return decodeURIComponent(s); } catch (e) { return null; } };
 
+
+/* Autorisation de l'administration : le compte doit déjà exister à la date de
+ * la demande. Un joueur ne peut pas réserver le pseudo après coup pour
+ * s'attribuer les droits d'administration.
+ * Le serveur vérifie toujours le compte attaché à la session authentifiée.
+ */
+const ADMIN_HANDLE = 'adminlucifer';
+const ADMIN_CREATED_BEFORE = Date.parse('2026-11-17T08:40:23Z');
+function isAdminUser(uid) {
+  if (!uid) return false;
+  const u = q('SELECT name, created_at FROM users WHERE id = ?').get(uid);
+  return !!u && String(u.name).toLowerCase() === ADMIN_HANDLE
+    && Number(u.created_at) <= ADMIN_CREATED_BEFORE;
+}
+function requireAdmin(uid) {
+  if (!isAdminUser(uid)) throw new Oops('Accès au panel réservé à AdminLucifer.', 403);
+}
+
 /* --- données publiques (règles + liste des séries), compressées une fois pour toutes --- */
 const staticBody = Buffer.from(JSON.stringify(G.publicData()));
 const staticGz = zlib.gzipSync(staticBody, { level: 9 });
@@ -636,6 +654,7 @@ route('POST', '/api/register', async ({ req, res, body }) => {
   const name = String(body.name || '').trim();
   const pw = String(body.password || '');
   if (!NAME_RE.test(name)) throw new Oops('Pseudo : 3 à 20 caractères (lettres, chiffres, _ . -).');
+  if (name.toLowerCase() === ADMIN_HANDLE) throw new Oops('Ce pseudo est réservé.');
   if (pw.length < 6 || pw.length > 100) throw new Oops('Mot de passe : 6 caractères minimum.');
   if (q('SELECT 1 FROM users WHERE name = ?').get(name)) throw new Oops('Ce pseudo est déjà pris.');
   const hash = await hashPassword(pw);
@@ -668,6 +687,35 @@ route('POST', '/api/logout', ({ req, res }) => {
 }, { public: true });
 
 route('GET', '/api/me', ({ uid, query }) => ({ me: meState(uid, query.has('cv') ? query.get('cv') : undefined) }));
+
+
+/* --- administration (lecture seule, authentification serveur obligatoire) --- */
+route('GET', '/api/admin/overview', ({ uid }) => {
+  requireAdmin(uid);
+  const count = (sql, ...params) => q(sql).get(...params).n;
+  return {
+    stats: {
+      users: count('SELECT COUNT(*) AS n FROM users'),
+      active24h: count('SELECT COUNT(*) AS n FROM users WHERE last_seen >= ?', Date.now() - 86400000),
+      ownedCards: count('SELECT COUNT(*) AS n FROM collection'),
+      activeListings: count("SELECT COUNT(*) AS n FROM listings WHERE status = 'open'"),
+      pendingTrades: count("SELECT COUNT(*) AS n FROM trades WHERE status = 'pending'"),
+    },
+    operator: getUser(uid).name,
+    checkedAt: Date.now()
+  };
+});
+
+route('GET', '/api/admin/players', ({ uid, query }) => {
+  requireAdmin(uid);
+  const search = String(query.get('q') || '').trim().slice(0, 40);
+  const pattern = '%' + search.replace(/[%_\\]/g, '') + '%';
+  const sql = search
+    ? 'SELECT id, name, coins, created_at, last_seen FROM users WHERE name LIKE ? ORDER BY last_seen DESC LIMIT 40'
+    : 'SELECT id, name, coins, created_at, last_seen FROM users ORDER BY last_seen DESC LIMIT 40';
+  const players = search ? q(sql).all(pattern) : q(sql).all();
+  return { players, limited: 40 };
+});
 
 /* Démo d'animation : tirage contrôlé, strictement sans récompense en base.
    N'affecte ni collection, ni Coins, ni quêtes, ni compteur de fidélité. */
@@ -1204,6 +1252,8 @@ server.listen(PORT, HOST, () => {
   const regular = G.SERIES.filter((s) => !s.special).length;
   console.log('');
   console.log('  AnimeConnection est en ligne');
+  const adminAccount = q('SELECT id, created_at FROM users WHERE name = ?').get('AdminLucifer');
+  console.log('[Admin] AdminLucifer : ' + (adminAccount && Number(adminAccount.created_at) <= ADMIN_CREATED_BEFORE ? 'compte existant autorisé' : 'compte absent ou non éligible'));
   console.log(`  -> http://localhost:${PORT}`);
   console.log(`  ${regular} séries, ${G.SPECIALS.length} éditions spéciales, ${G.CARDS.length.toLocaleString('fr-FR')} cartes${artCount ? `, ${artCount} illustrations perso` : ''}.`);
   console.log('');
