@@ -1051,7 +1051,7 @@ const MIME = {
 };
 const COMPRESSIBLE = new Set(['.html', '.css', '.js', '.json', '.svg', '.txt']);
 const SECURITY_HEADERS = {
-  'Content-Security-Policy': "default-src 'self'; img-src 'self' data: https://s4.anilist.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+  'Content-Security-Policy': "default-src 'self'; img-src 'self' data: https://s4.anilist.co https://ddragon.leagueoflegends.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
   'X-Content-Type-Options': 'nosniff',
   'Referrer-Policy': 'same-origin',
 };
