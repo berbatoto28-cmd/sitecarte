@@ -8,7 +8,8 @@
     "start": "node --disable-warning=ExperimentalWarning server.js",
     "cards": "node tools/build-cards.mjs && node tools/upgrade-v15.mjs",
     "cards:fresh": "node tools/build-cards.mjs 50000 && node tools/upgrade-v15.mjs",
-    "summer:audit": "node tools/audit-summer-expansion.cjs"
+    "summer:audit": "node tools/audit-summer-expansion.cjs",
+    "pack:test": "node lib/test-special-edition-pools.cjs"
   },
   "engines": {
     "node": ">=22.13"

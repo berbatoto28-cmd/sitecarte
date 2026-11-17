@@ -23,7 +23,6 @@ COPY lib/ /app/lib/
 COPY public/ /app/public/
 # Corrected static catalogue only: never copy or replace a player database.
 COPY data/cards.json /app/data/cards.json
-COPY tools/test-special-edition-pools.cjs /app/tools/test-special-edition-pools.cjs
-RUN node tools/test-special-edition-pools.cjs
+RUN node lib/test-special-edition-pools.cjs
 EXPOSE 3000
 CMD ["node", "--disable-warning=ExperimentalWarning", "server.js"]
