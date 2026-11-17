@@ -5,6 +5,16 @@ const G=require('../lib/game');
 const tiers=['astral','primordiale','secrete'];
 const elite=G.CARDS.filter(c=>tiers.includes(c.rarity));
 const identity=c=>c.championId?'riot:'+c.championId:'anilist:'+/\/character\/(?:large|medium|small)\/[a-z]?(\d+)/i.exec(c.img)[1];
+// Lower-rarity variants are kept, but may not repeat in the same anime/tier.
+const variantSlots = new Set();
+for (const c of G.CARDS) {
+ const k = `${c.serie}|${c.rarity}|${identity(c)}`;
+ assert(!variantSlots.has(k), `Same anime and rarity repeat: ${c.id}`);
+ variantSlots.add(k);
+}
+const itachi=G.CARDS.filter(c=>c.name==='Itachi Uchiha');
+assert.equal(itachi.length,3);
+assert.equal(new Set(itachi.map(c=>c.rarity)).size,3);
 for(const get of [identity,c=>c.img.split(/[?#]/)[0],c=>c.art||c.img]) {
  const seen=new Map();
  for(const c of elite) {const k=get(c);assert(!seen.has(k),`Duplicate ${k}: ${seen.get(k)} / ${c.id}`);seen.set(k,c.id);}

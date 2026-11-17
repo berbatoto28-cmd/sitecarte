@@ -11,3 +11,7 @@ Catalogue source corrigé : 2 569 Astral, 2 571 Primordiales, 7 711 Secrètes. L
 Le Dockerfile extrait les ressources originales puis superpose uniquement le catalogue statique `data/cards.json`. Le volume Railway `/data` et le chemin de la base des joueurs restent inchangés.
 
 Vérifications : `node tools/test-elite.cjs`, `node test-render.cjs`, `node test-v20.cjs`. Reproduction : `node tools/rank-elite.cjs <catalogue-original.json> <catalogue-corrige.json> [rapport.json]`.
+
+## Variantes dans les raretés inférieures
+
+Les variantes sont conservées dans les raretés inférieures à la demande de l'utilisateur. Elles occupent désormais des raretés différentes au sein d'un même anime : deux Itachi Mythiques ne doivent plus apparaître dans Naruto. Itachi conserve trois cartes, une Légendaire, une Mythique et une Astral. La correction échange en priorité les raretés entre cartes de la même série, puis reclasse les quelques emplacements restants dans une rareté inférieure libre. Elle préserve tous les identifiants, numéros, noms, illustrations, attributions élites et l'ordre de la collection ; les quantités des joueurs ne sont pas modifiées.
