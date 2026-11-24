@@ -38,14 +38,13 @@ function httpsLink(value) {
 }
 
 function layout(title, body, current = '') {
-  const discord = current === '/' ? null : httpsLink(process.env.DREAMLIGHT_DISCORD_URL);
   return `<!doctype html><html lang="fr"><head><meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escape(title)} · Dreamlight</title><link rel="stylesheet" href="/style.css"><link rel="icon" type="image/png" href="/dreamlight-logo.png"></head>
   <body${background ? ' class="custom-background"' : ''}><header><div class="shell top"><a class="brand" href="/"><img src="/dreamlight-logo.png" width="42" height="40" alt=""> Dreamlight RP</a>
   <nav class="main-nav" aria-label="Navigation principale">${[
     ['/', 'Accueil'], ['/reglements', 'Règlements'], ['/boutique', 'Boutique']
-  ].map(([url, label]) => `<a href="${url}"${current === url ? ' aria-current="page"' : ''}>${label}</a>`).join('')}${discord ? `<a class="button button--outline" href="${escape(discord)}">Rejoindre le Discord</a>` : ''}</nav></div></header>
+  ].map(([url, label]) => `<a href="${url}"${current === url ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav></div></header>
   <main class="shell">${body}</main>
   <footer class="shell">Dreamlight <span>Centre des règlements</span></footer></body></html>`;
 }
@@ -103,10 +102,12 @@ function ruleCards() {
 }
 
 function home() {
+  const discord = httpsLink(process.env.DREAMLIGHT_DISCORD_URL);
   return layout('Accueil', `<section class="hero"><div class="orb" aria-hidden="true"></div>
     <div class="hero-copy"><h1>Dreamlight <em>RP</em></h1>
     <p>Crée ton personnage, trouve ta place en ville et écris ton histoire avec les autres joueurs.</p>
-    <div class="hero-actions"><a class="button" href="/reglements">Lire les règlements</a>
+    <div class="hero-actions">${discord ? `<a class="button" href="${escape(discord)}">Rejoindre le Discord</a>` : ''}
+    <a class="button${discord ? ' button--outline' : ''}" href="/reglements">Lire les règlements</a>
     <a class="button button--outline" href="/boutique">Voir la boutique</a></div></div>
     <img class="hero-logo" src="/dreamlight-logo.png" width="480" height="448" alt=""></section>
     <section id="reglements"><h2>Règlements</h2><div class="grid home-grid">${ruleCards()}</div></section>`, '/');
