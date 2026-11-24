@@ -62,3 +62,19 @@ article li { color: var(--muted); }
   .hero { grid-template-columns: 1fr; }
   .hero-logo { width: min(62%, 240px); grid-row: 1; justify-self: start; }
 }
+
+.icon {
+  --icon-color: #dcbfff;
+  --icon-bg: #312342;
+  width: 3rem;
+  height: 3rem;
+  color: var(--icon-color);
+  background: var(--icon-bg);
+  border: 1px solid color-mix(in srgb, var(--icon-color) 25%, transparent);
+  border-radius: .8rem;
+}
+.icon svg { width: 1.55rem; height: 1.55rem; }
+.icon--discord { --icon-color: #b7c5ff; --icon-bg: #252a49; }
+.icon--jeu { --icon-color: #94e4cd; --icon-bg: #203939; }
+.icon--moderation { --icon-color: #ffb8cf; --icon-bg: #40243a; }
+.icon--legal { --icon-color: #ffd591; --icon-bg: #3f3028; }
