@@ -1,17 +1,11 @@
 {
-  "name": "animeconnection",
+  "name": "dreamlight-reglements",
   "version": "1.0.0",
-  "description": "AnimeConnection : jeu de cartes à collectionner anime & manga, 100 % gratuit (packs, missions, marché, échanges).",
   "private": true,
-  "main": "server.js",
   "scripts": {
-    "start": "node --disable-warning=ExperimentalWarning server.js",
-    "cards": "node tools/build-cards.mjs && node tools/upgrade-v15.mjs",
-    "cards:fresh": "node tools/build-cards.mjs 50000 && node tools/upgrade-v15.mjs",
-    "summer:audit": "node tools/audit-summer-expansion.cjs",
-    "pack:test": "node lib/test-special-edition-pools.cjs"
+    "start": "node server.js"
   },
   "engines": {
-    "node": ">=22.13"
+    "node": ">=22"
   }
 }

@@ -1,0 +1,48 @@
+* { box-sizing: border-box; }
+:root { color-scheme: dark; --bg: #0e0b20; --panel: #19142f; --text: #fbf7ff; --muted: #cec4e4; --accent: #dfbcff; --line: #392e56; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 1rem/1.6 system-ui, sans-serif; }
+a { color: inherit; }
+a:focus-visible { outline: 3px solid #f0c2ff; outline-offset: 4px; }
+.shell { width: min(1120px, calc(100% - 2rem)); margin-inline: auto; }
+header { border-bottom: 1px solid var(--line); }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; min-height: 70px; }
+.top a, .card, .button { text-decoration: none; }
+.brand { display: flex; align-items: center; gap: .65rem; font: 700 1.35rem Georgia, serif; }
+.brand span, .icon { color: var(--accent); }
+.top nav { color: var(--muted); font-size: .92rem; }
+.hero { position: relative; isolation: isolate; overflow: hidden; margin: 2rem 0 3rem; padding: clamp(2rem, 7vw, 5.5rem); border: 1px solid var(--line); border-radius: 28px; background: linear-gradient(120deg,#201336,#171033 62%,#281756); }
+.orb { position: absolute; z-index: -1; inset: 0; background: radial-gradient(ellipse at 77% 42%, #6b43ab75, transparent 47%), radial-gradient(circle at 84% 40%, #e9c4ff 0 1px, transparent 3px), radial-gradient(circle at 72% 23%, #ab91f3 0 2px, transparent 4px), radial-gradient(circle at 92% 64%, #f0d6ff 0 1px, transparent 3px); }
+.orb::after { content: '✦'; position: absolute; font: clamp(6rem, 18vw, 16rem)/1 Georgia, serif; right: 9%; top: 50%; translate: 0 -50%; color: #e6c6ff; opacity: .68; text-shadow: 0 0 65px #b386ff; }
+h1,h2,h3,p { margin: 0; }
+h1,h2,h3 { line-height: 1.12; }
+h1 { font: 500 clamp(2.55rem, 7vw, 5.5rem)/.99 Georgia, serif; letter-spacing: -.035em; }
+h1 em { color: var(--accent); font-weight: 400; }
+h2 { font-size: clamp(1.3rem, 3vw, 2rem); }
+p { color: var(--muted); margin-top: .75rem; }
+.hero-copy { max-width: 34rem; }
+.hero p { margin-block: 1.25rem; }
+.button { display: inline-block; border-radius: 999px; background: var(--accent); color: #1b102b; padding: .65rem 1.12rem; font-weight: 700; }
+.button:hover { background: #f0d6ff; }
+.notice { color: #e5cbfb; font-size: .93rem; }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 1.25rem 0 3rem; }
+.card, article, .side { border: 1px solid var(--line); background: var(--panel); border-radius: 18px; padding: 1.25rem; }
+.card { display: flex; flex-direction: column; }
+.card:hover { border-color: var(--accent); background: #251a40; }
+.icon { display: grid; place-items: center; width: 2.7rem; height: 2.7rem; border-radius: 11px; background: #35234e; font-size: 1.4rem; margin-bottom: .9rem; }
+.card h3 { font-size: 1.13rem; }
+.action { margin-top: auto; padding-top: 1rem; color: var(--accent); font-size: .9rem; font-weight: 700; }
+.back { display: inline-block; margin: 2rem 0 1rem; color: var(--accent); }
+.reading { display: grid; grid-template-columns: minmax(0,1fr) minmax(200px,260px); gap: 1rem; align-items: start; margin-bottom: 3rem; }
+article { padding: clamp(1.25rem,5vw,3rem); }
+article h1 { font-size: clamp(2rem,6vw,3.8rem); }
+article section { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+article section h2, .side h2 { font-size: 1.2rem; }
+.side a { display: block; padding: .5rem; margin-top: .35rem; text-decoration: none; border-radius: 6px; }
+.side a:hover, .side a[aria-current] { background: #35234e; color: var(--accent); }
+footer { border-top: 1px solid var(--line); padding-block: 1.3rem; display: flex; justify-content: space-between; gap: .75rem; color: var(--muted); font-size: .9rem; }
+.missing { padding-block: 4rem; }
+.missing .button { margin-top: 1.2rem; }
+@media (max-width: 900px) { .grid { grid-template-columns: repeat(2,1fr); } .orb::after { opacity: .35; } }
+@media (max-width: 580px) { .grid,.reading { grid-template-columns: 1fr; } .hero { margin-top: 1rem; } .orb::after { right: 2%; top: 30%; opacity: .2; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

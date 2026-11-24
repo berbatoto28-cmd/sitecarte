@@ -1,6 +1,0 @@
-AnimeConnection — illustrations personnalisées
-
-Pour que les cartes Summer Waifus montrent réellement les personnages en maillot de bain, ajoutez une illustration autorisée pour chaque carte, nommée SUM-001.webp, SUM-002.webp, ..., SUM-036.webp. Vous pouvez aussi utiliser .png ou .jpg.
-
-Le serveur les substitue automatiquement à leur illustration AniList.
-Les images fournies initialement via AniList ne correspondent pas toutes à des maillots de bain : aucune transformation des images externes n’est effectuée.

@@ -1,8 +1,0 @@
-data/*.db
-data/*.db-*
-*.db
-*.db-*
-tools/.cache/
-node_modules/
-.railway/
-*.log

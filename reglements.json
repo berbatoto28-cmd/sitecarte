@@ -1,0 +1,66 @@
+[
+  {
+    "slug": "general",
+    "titre": "Règlement général",
+    "icone": "✦",
+    "description": "Respect, comportement et vie en communauté.",
+    "sections": [
+      {
+        "titre": "Respect entre membres",
+        "texte": "Respectez les autres membres dans vos échanges. Les insultes, le harcèlement et les propos discriminatoires sont interdits."
+      },
+      {
+        "titre": "Vie privée",
+        "texte": "Ne partagez pas les informations personnelles d’une autre personne sans son accord."
+      }
+    ]
+  },
+  {
+    "slug": "discord",
+    "titre": "Règlement Discord",
+    "icone": "◈",
+    "description": "Salons, messages et discussions vocales.",
+    "sections": [
+      {
+        "titre": "Utilisation des salons",
+        "texte": "Publiez dans le salon adapté au sujet et évitez le spam ainsi que les mentions répétées."
+      },
+      {
+        "titre": "Salons vocaux",
+        "texte": "Laissez les autres s’exprimer et évitez les bruits qui gênent la discussion."
+      }
+    ]
+  },
+  {
+    "slug": "jeu",
+    "titre": "Règlement en jeu",
+    "icone": "☾",
+    "description": "Fair-play et comportement pendant les parties.",
+    "sections": [
+      {
+        "titre": "Fair-play",
+        "texte": "Jouez sans triche et signalez les bugs au staff."
+      },
+      {
+        "titre": "Interactions en jeu",
+        "texte": "Évitez de perturber volontairement l’expérience des autres joueurs."
+      }
+    ]
+  },
+  {
+    "slug": "moderation",
+    "titre": "Modération et signalements",
+    "icone": "◇",
+    "description": "Contacter le staff et contester une décision.",
+    "sections": [
+      {
+        "titre": "Signaler un problème",
+        "texte": "Contactez le staff en privé. Décrivez les faits et joignez les éléments utiles si vous en avez."
+      },
+      {
+        "titre": "Contester une décision",
+        "texte": "Expliquez calmement la situation au staff et indiquez la décision concernée."
+      }
+    ]
+  }
+]
