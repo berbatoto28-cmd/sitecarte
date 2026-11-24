@@ -17,3 +17,7 @@ Avec Node.js 22 ou supérieur, lancer `npm start`, puis ouvrir http://localhost:
 ## Déployer sur Railway
 
 Connecter le dépôt GitHub à un service Railway. Le fichier `railway.json` configure le démarrage et le contrôle de santé. Dans les réglages réseau du service, générer un domaine public Railway. Les changements envoyés sur la branche connectée déclenchent les nouveaux déploiements.
+
+## Changer le fond
+
+Ajouter une image WebP nommée `dreamlight-background.webp` à la racine du dépôt et l’envoyer sur la branche déployée. Le site l’utilise automatiquement derrière un voile sombre. Sans ce fichier, le fond nocturne intégré s’affiche.

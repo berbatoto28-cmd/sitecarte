@@ -77,3 +77,90 @@ article li { color: var(--muted); }
 .icon--jeu { --icon-color: #94e4cd; --icon-bg: #203939; }
 .icon--illegal { --icon-color: #ffb8cf; --icon-bg: #40243a; }
 .icon--legal { --icon-color: #ffd591; --icon-bg: #3f3028; }
+
+/* Dreamlight RP */
+:root {
+  --bg: #100a21;
+  --panel: #1a132c;
+  --line: #443354;
+  --accent: #efd0ff;
+  --muted: #ddd0e8;
+}
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 82% 0%, #41236c 0%, transparent 48%),
+    radial-gradient(ellipse at 2% 37%, #39183f 0%, transparent 38%),
+    linear-gradient(155deg, #170d2a, var(--bg) 60%, #1d112d);
+  background-attachment: fixed;
+}
+body.custom-background {
+  background: linear-gradient(150deg, #130b23e0, #120b24b8 50%, #130b23ec),
+    url('/dreamlight-background.webp') center / cover no-repeat fixed, var(--bg);
+}
+header { background: #130b25ed; }
+.brand { font-family: system-ui, sans-serif; font-size: 1.12rem; letter-spacing: -.02em; }
+.top nav a:hover { color: var(--text); text-decoration: underline; }
+.hero {
+  padding: clamp(1.6rem, 5.7vw, 4.7rem);
+  min-height: 375px;
+  border-color: #795492;
+  background: linear-gradient(115deg, #211135f5 16%, #2b184ad9 58%, #4a246f90);
+  box-shadow: 0 24px 65px #0b071c65, inset 0 1px #f0c2ff29;
+}
+.orb {
+  background:
+    radial-gradient(ellipse at 80% 58%, #cc49a450, transparent 43%),
+    radial-gradient(ellipse at 92% 8%, #8170ef77, transparent 47%),
+    linear-gradient(164deg, transparent 64%, #ee79c73b 64.2%, transparent 65%),
+    linear-gradient(164deg, transparent 76%, #b370fb38 76.2%, transparent 77%),
+    radial-gradient(circle at 87% 26%, #ffcdf8 0 1px, transparent 3px),
+    radial-gradient(circle at 71% 17%, #cabaff 0 1px, transparent 3px),
+    radial-gradient(circle at 95% 74%, #ffe2b8 0 1px, transparent 3px);
+}
+.hero h1 { font-size: clamp(2.4rem, 6vw, 5.1rem); }
+.hero h1 em {
+  color: #f5c0e7;
+  background: linear-gradient(110deg, #c7afff, #ffb4e0 62%, #ffd39a);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-logo { filter: drop-shadow(0 18px 38px #0f072b9c); }
+.button { background: linear-gradient(110deg, #e4c2ff, #ffbdda); padding: .75rem 1.2rem; }
+.button:hover { background: #ffe0fa; }
+.home-grid > .card { min-height: 205px; }
+.card, article, .side {
+  background: linear-gradient(150deg, #241935, #1a132b 70%);
+  box-shadow: inset 0 1px #f0c2ff10, 0 8px 24px #0d071e38;
+}
+.card { padding: 1.4rem; transition: border-color .18s ease, transform .18s ease; }
+.card:hover { transform: translateY(-3px); background: linear-gradient(150deg, #342142, #231931); }
+.action { color: #f4cbff; }
+.legal-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.legal-grid .card { min-height: 108px; }
+article p, article li { line-height: 1.75; }
+article h3[id] { scroll-margin-top: 1.4rem; color: #f6dcff; }
+article h3[id]:target { text-decoration: underline; text-decoration-color: #d695ee; text-underline-offset: .22em; }
+.reading--document { grid-template-columns: minmax(0, 1fr) minmax(220px, 290px); }
+.reading--document article { grid-column: 1; grid-row: 1; }
+.legal-toc { grid-column: 2; grid-row: 1; position: sticky; top: 1rem; }
+.legal-toc summary { cursor: pointer; font-weight: 700; }
+.legal-toc ul { max-height: min(62vh, 560px); overflow: auto; overscroll-behavior: contain; }
+.legal-toc a { margin-top: 0; }
+@media (max-width: 780px) {
+  .reading--document { grid-template-columns: minmax(0, 1fr); }
+  .reading--document article, .legal-toc { grid-column: auto; grid-row: auto; }
+  .legal-toc { position: static; }
+  .legal-toc ul { max-height: 12rem; }
+  .legal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .hero { min-height: auto; gap: .7rem; }
+  .hero-logo { width: min(52%, 170px); }
+  .legal-grid { grid-template-columns: 1fr; }
+  body, body.custom-background { background-attachment: scroll; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+  .card:hover { transform: none; }
+}

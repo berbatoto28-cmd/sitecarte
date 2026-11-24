@@ -4,6 +4,8 @@ const path = require('node:path');
 const rules = require('./reglements.json');
 
 const css = fs.readFileSync(path.join(__dirname, 'style.css'));
+const backgroundPath = path.join(__dirname, 'dreamlight-background.webp');
+const background = fs.existsSync(backgroundPath) ? fs.readFileSync(backgroundPath) : null;
 const logo = fs.readFileSync(path.join(__dirname, 'dreamlight-logo.png'));
 const escape = value => String(value).replace(/[&<>"']/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -29,7 +31,7 @@ function layout(title, body) {
   return `<!doctype html><html lang="fr"><head><meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escape(title)} · Dreamlight</title><link rel="stylesheet" href="/style.css"><link rel="icon" type="image/png" href="/dreamlight-logo.png"></head>
-  <body><header><div class="shell top"><a class="brand" href="/"><img src="/dreamlight-logo.png" width="42" height="40" alt=""> Dreamlight</a>
+  <body${background ? ' class="custom-background"' : ''}><header><div class="shell top"><a class="brand" href="/"><img src="/dreamlight-logo.png" width="42" height="40" alt=""> Dreamlight</a>
   <nav aria-label="Navigation principale"><a href="/#reglements">Tous les règlements</a></nav></div></header>
   <main class="shell">${body}</main>
   <footer class="shell">Dreamlight <span>Centre des règlements</span></footer></body></html>`;
@@ -68,7 +70,7 @@ function renderLegalDocument(markdown) {
 
   return {
     html,
-    toc: '<nav class="side legal-toc" aria-label="Sommaire du règlement"><h2>Sommaire</h2><ul>' + contents.join('') + '</ul></nav>'
+    toc: '<nav class="side legal-toc" aria-label="Sommaire du règlement"><details open><summary>Sommaire</summary><ul>' + contents.join('') + '</ul></details></nav>'
   };
 }
 
@@ -78,7 +80,7 @@ function legalDetail(rule, item) {
     ? renderSections(item.sections)
     : '<p class="notice">Le règlement de cette rubrique sera ajouté prochainement.</p>';
   return layout(item.titre, `<a class="back" href="${ruleUrl(rule)}">Règlement légal</a>
-    <div class="reading"><article><h1>${escape(item.titre)}</h1>${content}</article>${document ? document.toc : ''}</div>`);
+    <div class="reading${document ? ' reading--document' : ''}">${document ? document.toc : ''}<article><h1>${escape(item.titre)}</h1>${content}</article></div>`);
 }
 
 function home() {
@@ -91,7 +93,7 @@ function home() {
     <a class="button" href="#reglements">Voir les rubriques</a></div><img class="hero-logo" src="/dreamlight-logo.png" width="480" height="448" alt=""></section>
     <section id="reglements"><h2>Choisir un règlement</h2>
     <p class="notice">Les textes proposés sont des exemples en attendant les règlements officiels.</p>
-    <div class="grid">${cards}</div></section>`);
+    <div class="grid home-grid">${cards}</div></section>`);
 }
 
 function renderSections(sections) {
@@ -116,6 +118,10 @@ http.createServer((req, res) => {
 
   const route = req.url.split('?')[0].replace(/\/$/, '') || '/';
   if (route === '/sante') return send(200, 'text/plain', 'OK');
+  if (route === '/dreamlight-background.webp' && background) {
+    res.writeHead(200, {'Content-Type': 'image/webp'});
+    return res.end(req.method === 'HEAD' ? undefined : background);
+  }
   if (route === '/dreamlight-logo.png') {
     res.writeHead(200, {'Content-Type': 'image/png'});
     return res.end(req.method === 'HEAD' ? undefined : logo);
