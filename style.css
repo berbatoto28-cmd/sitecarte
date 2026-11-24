@@ -46,3 +46,5 @@ footer { border-top: 1px solid var(--line); padding-block: 1.3rem; display: flex
 @media (max-width: 900px) { .grid { grid-template-columns: repeat(2,1fr); } .orb::after { opacity: .35; } }
 @media (max-width: 580px) { .grid,.reading { grid-template-columns: 1fr; } .hero { margin-top: 1rem; } .orb::after { right: 2%; top: 30%; opacity: .2; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+.legal-grid .card h2 { font-size: 1.13rem; }

@@ -62,5 +62,88 @@
         "texte": "Expliquez calmement la situation au staff et indiquez la décision concernée."
       }
     ]
+  },
+  {
+    "slug": "legal",
+    "titre": "Règlement légal",
+    "icone": "⚖",
+    "description": "Consulte les règlements par secteur d’activité.",
+    "rubriques": [
+      {
+        "slug": "gouvernement-justice",
+        "titre": "Gouvernement & Justice",
+        "sections": []
+      },
+      {
+        "slug": "forces-ordre-defense",
+        "titre": "Forces de l'ordre & Défense",
+        "sections": []
+      },
+      {
+        "slug": "sante-secours",
+        "titre": "Santé & Services de secours",
+        "sections": []
+      },
+      {
+        "slug": "education-recherche",
+        "titre": "Éducation & Recherche",
+        "sections": []
+      },
+      {
+        "slug": "automobile-mecanique",
+        "titre": "Automobile & Mécanique",
+        "sections": []
+      },
+      {
+        "slug": "services-professionnels",
+        "titre": "Services professionnels",
+        "sections": []
+      },
+      {
+        "slug": "transport-logistique",
+        "titre": "Transport & Logistique",
+        "sections": []
+      },
+      {
+        "slug": "securite-privee",
+        "titre": "Sécurité privée",
+        "sections": []
+      },
+      {
+        "slug": "commerces-beaute",
+        "titre": "Commerces & Beauté",
+        "sections": []
+      },
+      {
+        "slug": "agriculture-alimentation",
+        "titre": "Agriculture & Production alimentaire",
+        "sections": []
+      },
+      {
+        "slug": "restauration-cafes",
+        "titre": "Restauration & Cafés",
+        "sections": []
+      },
+      {
+        "slug": "vie-nocturne-divertissement",
+        "titre": "Vie nocturne & Divertissement",
+        "sections": []
+      },
+      {
+        "slug": "musique-production-artistique",
+        "titre": "Musique & Production artistique",
+        "sections": []
+      },
+      {
+        "slug": "medias-communication",
+        "titre": "Médias & Communication",
+        "sections": []
+      },
+      {
+        "slug": "mode-influence-evenementiel",
+        "titre": "Mode, Influence & Événementiel",
+        "sections": []
+      }
+    ]
   }
 ]

@@ -19,10 +19,26 @@ function layout(title, body) {
   <footer class="shell">Dreamlight <span>Centre des règlements</span></footer></body></html>`;
 }
 
+function legalIndex(rule) {
+  const cards = rule.rubriques.map(item => `<a class="card" href="${ruleUrl(rule)}/${encodeURIComponent(item.slug)}">
+    <h2>${escape(item.titre)}</h2><span class="action">Consulter la rubrique</span></a>`).join('');
+  return layout(rule.titre, `<a class="back" href="/#reglements">Tous les règlements</a>
+    <h1>${escape(rule.titre)}</h1><p>${escape(rule.description)}</p>
+    <div class="grid legal-grid">${cards}</div>`);
+}
+
+function legalDetail(rule, item) {
+  const content = item.sections.length
+    ? renderSections(item.sections)
+    : '<p class="notice">Le règlement de cette rubrique sera ajouté prochainement.</p>';
+  return layout(item.titre, `<a class="back" href="${ruleUrl(rule)}">Règlement légal</a>
+    <div class="reading"><article><h1>${escape(item.titre)}</h1>${content}</article></div>`);
+}
+
 function home() {
   const cards = rules.map(rule => `<a class="card" href="${ruleUrl(rule)}">
     <span class="icon" aria-hidden="true">${escape(rule.icone)}</span><h3>${escape(rule.titre)}</h3>
-    <p>${escape(rule.description)}</p><span class="action">Lire le règlement</span></a>`).join('');
+    <p>${escape(rule.description)}</p><span class="action">${rule.rubriques ? 'Voir les sous-catégories' : 'Lire le règlement'}</span></a>`).join('');
   return layout('Centre des règlements', `<section class="hero"><div class="orb" aria-hidden="true"></div>
     <div class="hero-copy"><h1>Les règlements<br>de <em>Dreamlight</em></h1>
     <p>Choisis la rubrique qui correspond à ce que tu cherches.</p>
@@ -32,9 +48,13 @@ function home() {
     <div class="grid">${cards}</div></section>`);
 }
 
+function renderSections(sections) {
+  return sections.map(section => `<section><h2>${escape(section.titre)}</h2><p>${escape(section.texte)}</p></section>`).join('');
+}
+
 function detail(rule) {
   const links = rules.map(item => `<a href="${ruleUrl(item)}"${item === rule ? ' aria-current="page"' : ''}>${escape(item.titre)}</a>`).join('');
-  const sections = rule.sections.map(section => `<section><h2>${escape(section.titre)}</h2><p>${escape(section.texte)}</p></section>`).join('');
+  const sections = renderSections(rule.sections);
   return layout(rule.titre, `<a class="back" href="/#reglements">Tous les règlements</a>
     <div class="reading"><article><span class="icon" aria-hidden="true">${escape(rule.icone)}</span>
     <h1>${escape(rule.titre)}</h1><p>${escape(rule.description)}</p>
@@ -53,6 +73,10 @@ http.createServer((req, res) => {
   if (route === '/style.css') return send(200, 'text/css', css);
   if (route === '/') return send(200, 'text/html', home());
   const rule = rules.find(item => ruleUrl(item) === route);
-  if (rule) return send(200, 'text/html', detail(rule));
+  if (rule) return send(200, 'text/html', rule.rubriques ? legalIndex(rule) : detail(rule));
+
+  const parent = rules.find(item => item.rubriques && route.startsWith(ruleUrl(item) + '/'));
+  const rubrique = parent?.rubriques.find(item => route === ruleUrl(parent) + '/' + encodeURIComponent(item.slug));
+  if (rubrique) return send(200, 'text/html', legalDetail(parent, rubrique));
   send(404, 'text/html', layout('Page introuvable', '<section class="missing"><h1>Page introuvable</h1><a class="button" href="/">Revenir à l’accueil</a></section>'));
 }).listen(Number(process.env.PORT || 3000), '0.0.0.0');
