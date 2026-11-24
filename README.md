@@ -1,12 +1,12 @@
 # Dreamlight · Centre des règlements
 
-Site en français avec quatre pages de règlement et un règlement légal organisé en quinze rubriques. Les textes fournis sont des exemples.
+Site en français avec quatre pages de règlement et un règlement légal organisé en seize rubriques. Les textes fournis sont des exemples.
 
 ## Modifier les règlements
 
 Éditer `reglements.json`. Chaque rubrique contient son titre, sa description, son adresse (`slug`) et les sections de son règlement. Une nouvelle rubrique apparaît automatiquement sur l’accueil et dans la navigation.
 
-Pour le règlement légal, les quinze sous-catégories sont dans `rubriques` sous l’entrée `legal`. Remplir `sections` avec les titres et textes officiels de chaque sous-catégorie.
+Pour le règlement légal, les seize sous-catégories sont dans `rubriques` sous l’entrée `legal`. Remplir `sections` avec les titres et textes officiels de chaque sous-catégorie. Le texte complet de la rubrique Général se trouve dans son champ `reglement`.
 
 Une fois les textes officiels intégrés, retirer les deux mentions de texte provisoire dans `server.js`.
 

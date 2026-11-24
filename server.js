@@ -27,12 +27,42 @@ function legalIndex(rule) {
     <div class="grid legal-grid">${cards}</div>`);
 }
 
+function renderLegalDocument(markdown) {
+  const contents = [];
+  const inline = text => escape(text).replace(/\*\*([^*]+)\*\*|\*([^*]+)\*/g,
+    (_, bold, italic) => bold ? '<strong>' + bold + '</strong>' : '<em>' + italic + '</em>');
+  const html = markdown.split(/\n[ \t]*\n/).map(block => {
+    const lines = block.split('\n');
+    if (lines.every(line => line.startsWith('- '))) {
+      return '<ul>' + lines.map(line => '<li>' + inline(line.slice(2)) + '</li>').join('') + '</ul>';
+    }
+    return lines.map(line => {
+      if (/^━+$/.test(line)) return '<hr>';
+      if (line.startsWith('## ')) {
+        const title = line.slice(3);
+        const id = 'article-' + title.slice(0, 2);
+        contents.push('<li><a href="#' + id + '">' + escape(title) + '</a></li>');
+        return '<h3 id="' + id + '">' + escape(title) + '</h3>';
+      }
+      if (line.startsWith('### ')) return '<h2>' + escape(line.slice(4)) + '</h2>';
+      if (line.startsWith('# ')) return '<p class="document-brand">' + escape(line.slice(2)) + '</p>';
+      return '<p>' + inline(line.trimEnd()) + '</p>';
+    }).join('');
+  }).join('');
+
+  return {
+    html,
+    toc: '<nav class="side legal-toc" aria-label="Sommaire du règlement"><h2>Sommaire</h2><ul>' + contents.join('') + '</ul></nav>'
+  };
+}
+
 function legalDetail(rule, item) {
-  const content = item.sections.length
+  const document = item.reglement && renderLegalDocument(item.reglement);
+  const content = document ? document.html : item.sections.length
     ? renderSections(item.sections)
     : '<p class="notice">Le règlement de cette rubrique sera ajouté prochainement.</p>';
   return layout(item.titre, `<a class="back" href="${ruleUrl(rule)}">Règlement légal</a>
-    <div class="reading"><article><h1>${escape(item.titre)}</h1>${content}</article></div>`);
+    <div class="reading"><article><h1>${escape(item.titre)}</h1>${content}</article>${document ? document.toc : ''}</div>`);
 }
 
 function home() {
