@@ -24,6 +24,6 @@ Ajouter une image WebP nommée `dreamlight-background.webp` à la racine du dép
 
 ## Portail et boutique
 
-Sur Railway, renseigner la variable `DREAMLIGHT_DISCORD_URL` avec le lien HTTPS officiel pour afficher le bouton Discord.
+Sur Railway, renseigner la variable `DREAMLIGHT_DISCORD_URL` avec le lien HTTPS officiel pour afficher le bouton Discord sur la page Communauté.
 
 Ajouter les offres dans `boutique.json` avec les champs `nom`, `description`, `prix` et `lien`. Le lien HTTPS ouvre la page d’achat du prestataire choisi. Une offre sans lien valide apparaît comme indisponible.

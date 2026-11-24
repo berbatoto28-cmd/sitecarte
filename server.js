@@ -43,7 +43,7 @@ function layout(title, body, current = '') {
   <title>${escape(title)} · Dreamlight</title><link rel="stylesheet" href="/style.css"><link rel="icon" type="image/png" href="/dreamlight-logo.png"></head>
   <body${background ? ' class="custom-background"' : ''}><header><div class="shell top"><a class="brand" href="/"><img src="/dreamlight-logo.png" width="42" height="40" alt=""> Dreamlight RP</a>
   <nav class="main-nav" aria-label="Navigation principale">${[
-    ['/', 'Accueil'], ['/serveur', 'Le serveur'], ['/reglements', 'Règlements'], ['/boutique', 'Boutique']
+    ['/', 'Accueil'], ['/communaute', 'Communauté'], ['/reglements', 'Règlements'], ['/boutique', 'Boutique']
   ].map(([url, label]) => `<a href="${url}"${current === url ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav></div></header>
   <main class="shell">${body}</main>
   <footer class="shell">Dreamlight <span>Centre des règlements</span></footer></body></html>`;
@@ -105,7 +105,7 @@ function home() {
   return layout('Accueil', `<section class="hero"><div class="orb" aria-hidden="true"></div>
     <div class="hero-copy"><h1>Dreamlight <em>RP</em></h1>
     <p>Crée ton personnage, trouve ta place en ville et écris ton histoire avec les autres joueurs.</p>
-    <div class="hero-actions"><a class="button" href="/serveur">Découvrir le serveur</a>
+    <div class="hero-actions"><a class="button" href="/reglements">Lire les règlements</a>
     <a class="button button--outline" href="/boutique">Voir la boutique</a></div></div>
     <img class="hero-logo" src="/dreamlight-logo.png" width="480" height="448" alt=""></section>
     <section id="reglements"><h2>Règlements</h2><div class="grid home-grid">${ruleCards()}</div></section>`, '/');
@@ -117,18 +117,15 @@ function rulesIndex() {
     <div class="grid home-grid">${ruleCards()}</div>`, '/reglements');
 }
 
-function serverPage() {
+function communityPage() {
   const discord = httpsLink(process.env.DREAMLIGHT_DISCORD_URL);
-  return layout('Le serveur', `<section class="portal-heading"><h1>Le serveur</h1>
-    <p>Dreamlight RP est une ville où ton personnage évolue au fil de ses rencontres, de son métier et de ses choix.</p></section>
-    <div class="grid portal-grid">
-      <article><h2>Préparer ton arrivée</h2><p>Lis les règles du serveur avant ta première session.</p>
-        <a class="button button--outline" href="/reglements">Lire les règlements</a></article>
-      <article><h2>Choisir ton activité</h2><p>Explore les métiers, les entreprises et les institutions du pôle légal.</p>
-        <a class="button button--outline" href="/reglements/legal">Explorer les secteurs</a></article>
-      <article><h2>Rejoindre la communauté</h2>
-        ${discord ? `<a class="button" href="${escape(discord)}">Ouvrir Discord</a>` : '<p>Le lien officiel pour rejoindre la communauté sera ajouté ici.</p>'}</article>
-    </div>`, '/serveur');
+  return layout('Communauté', `<section class="community-panel">
+    <div class="community-copy"><h1>Rejoins la communauté</h1>
+      <p>Retrouve les joueurs de Dreamlight RP, suis les annonces et pose tes questions avant ta première session.</p>
+      ${discord ? `<a class="button community-button" href="${escape(discord)}">Rejoindre le Discord</a>` : '<p class="notice">L’invitation Discord sera disponible ici.</p>'}
+    </div>
+    <div class="community-visual" aria-hidden="true"><img src="/dreamlight-logo.png" width="480" height="448" alt=""></div>
+  </section>`, '/communaute');
 }
 
 function shop() {
@@ -177,7 +174,11 @@ http.createServer((req, res) => {
   if (route === '/style.css') return send(200, 'text/css', css);
   if (route === '/') return send(200, 'text/html', home());
   if (route === '/reglements') return send(200, 'text/html', rulesIndex());
-  if (route === '/serveur') return send(200, 'text/html', serverPage());
+  if (route === '/communaute') return send(200, 'text/html', communityPage());
+  if (route === '/serveur') {
+    res.writeHead(301, {Location: '/communaute'});
+    return res.end();
+  }
   if (route === '/boutique') return send(200, 'text/html', shop());
   const rule = rules.find(item => ruleUrl(item) === route);
   if (rule) return send(200, 'text/html', rule.rubriques ? legalIndex(rule) : detail(rule));
