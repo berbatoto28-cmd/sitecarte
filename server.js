@@ -38,13 +38,14 @@ function httpsLink(value) {
 }
 
 function layout(title, body, current = '') {
+  const discord = current === '/' ? null : httpsLink(process.env.DREAMLIGHT_DISCORD_URL);
   return `<!doctype html><html lang="fr"><head><meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escape(title)} · Dreamlight</title><link rel="stylesheet" href="/style.css"><link rel="icon" type="image/png" href="/dreamlight-logo.png"></head>
   <body${background ? ' class="custom-background"' : ''}><header><div class="shell top"><a class="brand" href="/"><img src="/dreamlight-logo.png" width="42" height="40" alt=""> Dreamlight RP</a>
   <nav class="main-nav" aria-label="Navigation principale">${[
-    ['/', 'Accueil'], ['/communaute', 'Communauté'], ['/reglements', 'Règlements'], ['/boutique', 'Boutique']
-  ].map(([url, label]) => `<a href="${url}"${current === url ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav></div></header>
+    ['/', 'Accueil'], ['/reglements', 'Règlements'], ['/boutique', 'Boutique']
+  ].map(([url, label]) => `<a href="${url}"${current === url ? ' aria-current="page"' : ''}>${label}</a>`).join('')}${discord ? `<a class="button button--outline" href="${escape(discord)}">Rejoindre le Discord</a>` : ''}</nav></div></header>
   <main class="shell">${body}</main>
   <footer class="shell">Dreamlight <span>Centre des règlements</span></footer></body></html>`;
 }
@@ -117,17 +118,6 @@ function rulesIndex() {
     <div class="grid home-grid">${ruleCards()}</div>`, '/reglements');
 }
 
-function communityPage() {
-  const discord = httpsLink(process.env.DREAMLIGHT_DISCORD_URL);
-  return layout('Communauté', `<section class="community-panel">
-    <div class="community-copy"><h1>Rejoins la communauté</h1>
-      <p>Retrouve les joueurs de Dreamlight RP, suis les annonces et pose tes questions avant ta première session.</p>
-      ${discord ? `<a class="button community-button" href="${escape(discord)}">Rejoindre le Discord</a>` : '<p class="notice">L’invitation Discord sera disponible ici.</p>'}
-    </div>
-    <div class="community-visual" aria-hidden="true"><img src="/dreamlight-logo.png" width="480" height="448" alt=""></div>
-  </section>`, '/communaute');
-}
-
 function shop() {
   const cards = products.map(product => {
     const checkout = httpsLink(product.lien);
@@ -174,9 +164,8 @@ http.createServer((req, res) => {
   if (route === '/style.css') return send(200, 'text/css', css);
   if (route === '/') return send(200, 'text/html', home());
   if (route === '/reglements') return send(200, 'text/html', rulesIndex());
-  if (route === '/communaute') return send(200, 'text/html', communityPage());
-  if (route === '/serveur') {
-    res.writeHead(301, {Location: '/communaute'});
+  if (route === '/serveur' || route === '/communaute') {
+    res.writeHead(302, {Location: '/reglements'});
     return res.end();
   }
   if (route === '/boutique') return send(200, 'text/html', shop());
