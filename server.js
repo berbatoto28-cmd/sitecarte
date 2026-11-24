@@ -31,17 +31,17 @@ function layout(title, body) {
   return `<!doctype html><html lang="fr"><head><meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escape(title)} · Dreamlight</title><link rel="stylesheet" href="/style.css"><link rel="icon" type="image/png" href="/dreamlight-logo.png"></head>
-  <body${background ? ' class="custom-background"' : ''}><header><div class="shell top"><a class="brand" href="/"><img src="/dreamlight-logo.png" width="42" height="40" alt=""> Dreamlight</a>
+  <body${background ? ' class="custom-background"' : ''}><header><div class="shell top"><a class="brand" href="/"><img src="/dreamlight-logo.png" width="42" height="40" alt=""> Dreamlight RP</a>
   <nav aria-label="Navigation principale"><a href="/#reglements">Tous les règlements</a></nav></div></header>
   <main class="shell">${body}</main>
   <footer class="shell">Dreamlight <span>Centre des règlements</span></footer></body></html>`;
 }
 
 function legalIndex(rule) {
-  const cards = rule.rubriques.map(item => `<a class="card" href="${ruleUrl(rule)}/${encodeURIComponent(item.slug)}">
-    <h2>${escape(item.titre)}</h2><span class="action">Consulter la rubrique</span></a>`).join('');
+  const cards = rule.rubriques.map(item => `<a class="card legal-card" href="${ruleUrl(rule)}/${encodeURIComponent(item.slug)}">
+    <h2>${escape(item.titre)}</h2><span class="action">${item.reglement || item.sections?.length ? 'Lire le règlement' : 'Texte à venir'}</span></a>`).join('');
   return layout(rule.titre, `<a class="back" href="/#reglements">Tous les règlements</a>
-    ${ruleIcon(rule)}<h1>${escape(rule.titre)}</h1><p>${escape(rule.description)}</p>
+    <div class="page-heading">${ruleIcon(rule)}<div><h1>${escape(rule.titre)}</h1><p>${escape(rule.description)}</p></div></div>
     <div class="grid legal-grid">${cards}</div>`);
 }
 
@@ -84,15 +84,14 @@ function legalDetail(rule, item) {
 }
 
 function home() {
-  const cards = rules.map(rule => `<a class="card" href="${ruleUrl(rule)}">
+  const cards = rules.map(rule => `<a class="card home-card home-card--${escape(rule.slug)}" href="${ruleUrl(rule)}">
     ${ruleIcon(rule)}<h3>${escape(rule.titre)}</h3>
-    <p>${escape(rule.description)}</p><span class="action">${rule.rubriques ? 'Voir les sous-catégories' : 'Lire le règlement'}</span></a>`).join('');
+    <p>${escape(rule.description)}</p><span class="action">${rule.rubriques ? 'Voir les sous-catégories' : rule.sections.length ? 'Lire le règlement' : 'Texte à venir'}</span></a>`).join('');
   return layout('Centre des règlements', `<section class="hero"><div class="orb" aria-hidden="true"></div>
     <div class="hero-copy"><h1>Les règlements<br>de <em>Dreamlight</em></h1>
-    <p>Choisis la rubrique qui correspond à ce que tu cherches.</p>
+    <p>Retrouve les règles du serveur et les règlements de chaque secteur RP.</p>
     <a class="button" href="#reglements">Voir les rubriques</a></div><img class="hero-logo" src="/dreamlight-logo.png" width="480" height="448" alt=""></section>
     <section id="reglements"><h2>Choisir un règlement</h2>
-    <p class="notice">Les textes proposés sont des exemples en attendant les règlements officiels.</p>
     <div class="grid home-grid">${cards}</div></section>`);
 }
 
