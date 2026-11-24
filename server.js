@@ -106,11 +106,11 @@ function home() {
   return layout('Accueil', `<section class="hero"><div class="orb" aria-hidden="true"></div>
     <div class="hero-copy"><h1>Dreamlight <em>RP</em></h1>
     <p>Crée ton personnage, trouve ta place en ville et écris ton histoire avec les autres joueurs.</p>
-    <div class="hero-actions">${discord ? `<a class="button" href="${escape(discord)}">Rejoindre le Discord</a>` : ''}
-    <a class="button${discord ? ' button--outline' : ''}" href="/reglements">Lire les règlements</a>
+    <div class="hero-actions"><a class="button" href="/reglements">Lire les règlements</a>
     <a class="button button--outline" href="/boutique">Voir la boutique</a></div></div>
     <img class="hero-logo" src="/dreamlight-logo.png" width="480" height="448" alt=""></section>
-    <section id="reglements"><h2>Règlements</h2><div class="grid home-grid">${ruleCards()}</div></section>`, '/');
+    <section id="reglements"><h2>Règlements</h2><div class="grid home-grid">${ruleCards()}</div></section>
+    ${discord ? `<div class="hero-actions" style="margin-bottom: 2rem"><a class="button" href="${escape(discord)}">Rejoindre le Discord</a></div>` : ''}`, '/');
 }
 
 function rulesIndex() {
