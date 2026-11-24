@@ -74,7 +74,6 @@ article li { color: var(--muted); }
   border-radius: .8rem;
 }
 .icon svg { width: 1.55rem; height: 1.55rem; }
-.icon--discord { --icon-color: #b7c5ff; --icon-bg: #252a49; }
 .icon--jeu { --icon-color: #94e4cd; --icon-bg: #203939; }
-.icon--moderation { --icon-color: #ffb8cf; --icon-bg: #40243a; }
+.icon--illegal { --icon-color: #ffb8cf; --icon-bg: #40243a; }
 .icon--legal { --icon-color: #ffd591; --icon-bg: #3f3028; }

@@ -1,6 +1,6 @@
 # Dreamlight · Centre des règlements
 
-Site en français avec quatre pages de règlement et un règlement légal organisé en seize rubriques. Les textes fournis sont des exemples.
+Site en français avec un règlement général, un règlement en jeu, un règlement illégal et un règlement légal organisé en seize rubriques. Les textes fournis sont des exemples.
 
 ## Modifier les règlements
 

@@ -16,22 +16,6 @@
     ]
   },
   {
-    "slug": "discord",
-    "titre": "Règlement Discord",
-    "icone": "◈",
-    "description": "Salons, messages et discussions vocales.",
-    "sections": [
-      {
-        "titre": "Utilisation des salons",
-        "texte": "Publiez dans le salon adapté au sujet et évitez le spam ainsi que les mentions répétées."
-      },
-      {
-        "titre": "Salons vocaux",
-        "texte": "Laissez les autres s’exprimer et évitez les bruits qui gênent la discussion."
-      }
-    ]
-  },
-  {
     "slug": "jeu",
     "titre": "Règlement en jeu",
     "icone": "☾",
@@ -44,22 +28,6 @@
       {
         "titre": "Interactions en jeu",
         "texte": "Évitez de perturber volontairement l’expérience des autres joueurs."
-      }
-    ]
-  },
-  {
-    "slug": "moderation",
-    "titre": "Modération et signalements",
-    "icone": "◇",
-    "description": "Contacter le staff et contester une décision.",
-    "sections": [
-      {
-        "titre": "Signaler un problème",
-        "texte": "Contactez le staff en privé. Décrivez les faits et joignez les éléments utiles si vous en avez."
-      },
-      {
-        "titre": "Contester une décision",
-        "texte": "Expliquez calmement la situation au staff et indiquez la décision concernée."
       }
     ]
   },
@@ -151,5 +119,11 @@
         "sections": []
       }
     ]
+  },
+  {
+    "slug": "illegal",
+    "titre": "Règlement illégal",
+    "description": "Règles des activités illégales en RP.",
+    "sections": []
   }
 ]
